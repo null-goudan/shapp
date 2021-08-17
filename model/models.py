@@ -43,7 +43,7 @@ class TableDeal(models.Model):
     图里面没有的一个部分，我发现需要单独建立出来一个表来表示这个交易信息,相当于上次那个比分表
     交易信息表
     """
-    User_request = models.ForeignKey(User, on_delete=models.CASCADE)  # 需求方，发布单子的用户
-    User_receive = models.ForeignKey(User, on_delete=models.CASCADE)  # 接收方，接受单子的用户
+    User_request = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User_request')  # 需求方，发布单子的用户
+    User_receive = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User_receive')  # 接收方，接受单子的用户
     isActive = models.BooleanField(default=False)   # 方便删除
     Table = models.ForeignKey(WorkTable, on_delete=models.CASCADE)  # 指向表的信息
