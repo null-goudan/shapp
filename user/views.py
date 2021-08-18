@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from model.models import User
+from model.models import User, UserInfo
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 import json
@@ -71,5 +71,33 @@ def log(request):
 
         res.append(resdic)
         return HttpResponse(json.dumps(res))
+
+
+def add(request):
+    if request.method == 'POST':
+        res = []
+        resdic = {}
+        name = request.POST['name']
+        sex = request.POST['sex']
+        age = request.POST['age']
+        student_num = request.POST['student_num']
+        student_class = request.POST['student_class']
+        try:
+            userinfo = UserInfo.objects.create(name=name, age=age, sex=sex, student_class=student_class, student_num=student_num, score=0, money=0)
+        except:
+            resdic['status'] = -1
+            resdic['msg'] = '用户信息创建有异常'
+            res.append(resdic)
+            return HttpResponse(json.dumps(res))
+
+        uid = request.COOKIES.get('uid')
+        user = User.objects.get(id=uid)
+        user.userinfo_id = userinfo.id
+        user.save()
+        resdic['status'] = 1
+        resdic['msg'] = '用户信息上传成功'
+        res.append(resdic)
+        return HttpResponse(json.dumps(res))
+
 
 
