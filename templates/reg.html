@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>reg</title>
+</head>
+<body>
+    注册
+    <form action="/user/reg/" method="post">
+        <label for="username">用户名</label>
+        <input type="text" id="username" name="username">
+        <label for="password">密码</label>
+        <input type="text" id="password" name="password">
+        <label for="password_again">再次输入密码</label>
+        <input type="text" id="password_again" name="password_again">
+        <label for="email">电子邮箱</label>
+        <input type="text" id="email" name="email">
+        <label for="is_superuser">是否是超级管理员</label>
+        <input type="checkbox" id="is_superuser" name="is_superuser">
+        <button type="submit" name="提交">注册</button>
+    </form>
+</body>
+</html>

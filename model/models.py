@@ -21,7 +21,7 @@ class User(AbstractUser):
     继承自Django的内置用户表
     新加指向用户信息表的外键
     """
-    userinfo = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    userinfo = models.ForeignKey(UserInfo, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class WorkTable(models.Model):
