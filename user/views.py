@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from model.models import User, UserInfo
+from model.models import User, UserInfo, WorkTable
 from django.contrib.auth import authenticate
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import json
 
 
@@ -10,10 +10,12 @@ def reg(request):
     if request.method == 'GET':
         return render(request, 'reg.html')
     if request.method == 'POST':
+        response = HttpResponse()
         res = []
         resdic = {}
         username = request.POST['username']
         password = request.POST['password']
+
         password_again = request.POST['password_again']
         if password != password_again:
             resdic['status'] = 0
@@ -25,13 +27,15 @@ def reg(request):
         is_superuser = request.POST['is_superuser']
         if not is_superuser:
             try:
-                user = User.objects.create_user(usernama=username, password=password, email=email, userinfo_id=None)
+                # 草 tm 的 username usernama，破检查器
+                user = User.objects.create_user(username=username, password=password, email=email, userinfo_id=None)
             except Exception as e:
                 print(e)
                 resdic['status'] = -1
                 resdic['msg'] = '未知错误'
-                res.append(resdic)
-                return HttpResponse(json.dumps(res))
+                if e:
+                    res.append(resdic)
+                    return HttpResponse(json.dumps(res))
         else:
             try:
                 user = User.objects.create_superuser(username=username, password=password, email=email, userinfo_id=None)
@@ -39,13 +43,17 @@ def reg(request):
                 print(e)
                 resdic['status'] = -1
                 resdic['msg'] = '未知错误'
-                res.append(resdic)
-                return HttpResponse(json.dumps(res))
+                if e:
+                    res.append(resdic)
+                    return HttpResponse(json.dumps(res))
+
         resdic['status'] = 1
         resdic['msg'] = '注册成功'
         resdic['uid'] = user.id
+        response.set_cookie("username", username, max_age=3600*24*3)
+        response.set_cookie("password", password, max_age=3600*24*3)
         res.append(resdic)
-        return HttpResponse(json.dumps(res))
+        return HttpResponse(json.dumps(res)).set_cookie('cookie', user.id, max_age=3600*24*3)
 
 
 def log(request):
@@ -54,50 +62,95 @@ def log(request):
     if request.method == 'POST':
         res = []
         resdic = {}
+        response = HttpResponse()
         username = request.POST['username']
         password = request.POST['password']
+        captcha = request.POST['captcha']
+        if captcha != 'xszg':
+            resdic['status'] = -3
+            resdic['msg'] = '验证码错误'
+            res.append(resdic)
+            return HttpResponse(json.dumps(res))
         try:
             user = authenticate(username=username, password=password)
             if user:
                 resdic['status'] = 1
                 resdic['msg'] = '登录成功'
                 resdic['uid'] = user.id
+                response.set_cookie('username', username, max_age=3600*24*3)
+                response.set_cookie('password', password, max_age=3600*24*3)
             else:
                 resdic['status'] = 0
                 resdic['msg'] = '用户名或者密码错误'
         except Exception as e:
             resdic['status'] = -1
             resdic['msg'] = '登录异常'
-
         res.append(resdic)
-        return HttpResponse(json.dumps(res))
+        response.write(json.dumps(res))
+        return response
 
 
 def add(request):
-    if request.method == 'POST':
-        res = []
-        resdic = {}
-        name = request.POST['name']
-        sex = request.POST['sex']
-        age = request.POST['age']
-        student_num = request.POST['student_num']
-        student_class = request.POST['student_class']
+    if request.method == "POST":
+        req = json.loads(request.body)
+        print(req)
+        key_flag = req.get("title") and req.get("content") and len(req) == 2
+        # 判断请求体是否正确
+        if key_flag:
+            title = req["title"]
+            content = req["content"]
+            # title返回的是一个list
+            title_exist = WorkTable.objects.filter(title=title)
+            # 判断是否存在同名title
+            if len(title_exist) != 0:
+                return JsonResponse({"status": "BS.400", "msg": "title already exist,fail to publish."})
+
+            '''插入数据'''
+            add_art = WorkTable(title=title, content=content, status="alive")
+            add_art.save()
+            return JsonResponse({"status": "BS.200", "msg": "publish article success."})
+        else:
+            return JsonResponse({"status": "BS.400", "message": "please check param."})
+
+
+def modify(request, art_id):
+    if request.method == "POST":
+        req = json.loads(request.body)
         try:
-            userinfo = UserInfo.objects.create(name=name, age=age, sex=sex, student_class=student_class, student_num=student_num, score=0, money=0)
-        except:
-            resdic['status'] = -1
-            resdic['msg'] = '用户信息创建有异常'
-            res.append(resdic)
-            return HttpResponse(json.dumps(res))
+            art = WorkTable.objects.get(id=art_id)
+            art_id = art.id
+            key_flag = req.get("title") and req.get("content") and len(req) == 2
+            if key_flag:
+                title = req["title"]
+                content = req["content"]
+                title_exist = WorkTable.objects.filter(title=title)
+                if len(title_exist) > 1:
+                    return JsonResponse({"status": "BS.400", "msg": "title already exist."})
+                '''更新数据'''
+                old_art = WorkTable.objects.get(id=art_id)
+                old_art.title = title
+                old_art.content = content
+                old_art.save()
+                return JsonResponse({"status": "BS.200", "msg": "modify article success."})
+        except WorkTable.DoesNotExist:
+            return JsonResponse({"status": "BS.300", "msg": "article is not exists,fail to modify."})
 
-        uid = request.COOKIES.get('uid')
-        user = User.objects.get(id=uid)
-        user.userinfo_id = userinfo.id
-        user.save()
-        resdic['status'] = 1
-        resdic['msg'] = '用户信息上传成功'
-        res.append(resdic)
-        return HttpResponse(json.dumps(res))
+
+def delete(request, art_id):
+    if request.method == "DELETE":
+        try:
+            art = WorkTable.objects.get(id=art_id)
+            art_id = art.id
+            art.delete(art_id)
+            return JsonResponse({"status": "BS.200", "msg": "delete article success."})
+        except WorkTable.DoesNotExist:
+            return JsonResponse({"status": "BS.300", "msg": "article is not exists,fail to delete."})
 
 
-
+def showlist(request):
+    if request.method == "GET":
+        articles = {}
+        query_art = WorkTable.objects.all()
+        for title in query_art:
+            articles[title.title] = title.status
+        return JsonResponse({"status": "BS.200", "all_titles": articles, "msg": "query articles success."})

@@ -30,10 +30,16 @@ class WorkTable(models.Model):
     储存单子的信息
     """
     title = models.CharField('单子标题', max_length=32, default='')
-    context = models.TextField('单子需求', max_length=500, default='')
+    classify = models.CharField('单子类型', max_length=32, default='未知')
+    goods = models.CharField('物品', max_length=32, default='')
+    get_address = models.CharField('取货地址', max_length=50, default='')
+    home_address = models.CharField('收货地址', max_length=50, default='')
+    phone = models.CharField('电话', max_length=32, default='')
+    date_start = models.DateTimeField('开始时间', auto_now=True)
+    date_ending = models.DateTimeField('截止时间', auto_now=True)
     back = models.IntegerField('回报', default=0)
     BackType = models.BooleanField('回报类型', default=False)  # 0代表金钱 1代表积分
-    TableType = models.CharField('单子类型', max_length=32,default='未知')
+    describe = models.TextField('详细需求/备注', max_length=200, default='')
     isAccept = models.BooleanField('是否已经接单', default=False)
     isFinished = models.BooleanField('是否结束', default=False)
 
