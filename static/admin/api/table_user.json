@@ -1,0 +1,27 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 500, 
+    "data": [
+      {
+        "number": 1,
+        "username": "user-1",
+        "sex": "女",
+        "name": "张三",
+        "email": "1161400732@qq.com",
+        "schoolnumber": 541907090222,
+        "pass": "是",
+        "wealth": 500
+      },
+      {
+        "number": 2,
+        "username": "user-2",
+        "sex": "男",
+        "name": "张三",
+        "email": "1161400732@qq.com",
+        "schoolnumber": 541907090220,
+        "pass": "是",
+        "wealth": 1000
+      }
+    ]
+  }

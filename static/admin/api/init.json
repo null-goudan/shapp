@@ -1,0 +1,86 @@
+{
+  "homeInfo": {
+    "title": "首页",
+    "href": "page/welcome.html"
+  },
+  "logoInfo": {
+    "title": "后台管理系统",
+    "image": "images/logo.png",
+    "href": ""
+  },
+  "menuInfo": [
+    {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "href": "",
+      "target": "_self",
+      "child": [
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-user",
+          "target": "_self",
+          "child": [
+            {
+              "title": "用户注册管理",
+              "href": "page/table_user.html",
+              "icon": "fa fa-user-plus",
+              "target": "_self"
+            },
+            {
+              "title": "用户认证管理",
+              "href": "page/table_user.html",
+              "icon": "fa fa-meh-o",
+              "target": "_self"
+            }
+            
+          ]
+        },
+     
+      
+      
+        {
+          "title": "订单管理",
+          "href": "",
+          "icon": "fa fa-calendar",
+          "target": "_self",
+          "child": [
+            {
+              "title": "待完成",
+              "href": "page/table_waiting.html",
+              "icon": "fa fa-exclamation",
+              "target": "_self"
+            },
+            {
+              "title": "完成中",
+              "href": "page/table_doing.html",
+              "icon": "fa fa-clock-o",
+              "target": "_self"
+            },
+            {
+              "title": "已完成",
+              "href": "page/table_finish.html",
+              "icon": "fa fa-check-circle",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "公告管理",
+          "href": "",
+          "icon": "fa fa-bullhorn",
+          "target": "_self",
+          "child": [
+            {
+              "title": "添加公告",
+              "href": "page/editor.html",
+              "icon": "fa fa-edit",
+              "target": "_self"
+            }
+          ]
+        }
+        
+      ]
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="goods" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">分类</label>
+                            <div class="layui-input-inline">
+                                <select name="leibie" lay-filter="">
+                                    <option value="">请选择</option>
+                                    <option value="take" >帮我取</option>
+                                    <option value="buy" >帮我买</option>
+                                    <option value="do" >帮我做</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">下单人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                       
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </fieldset>
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+                <!-- <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button> -->
+            </div>
+        </script>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+        
+        <!-- 编辑表单 -->
+        <div class="xiugai layui-form layuimini-form" hidden="hidden">
+    
+            <form class="layui-form layui-form-pane" action="">
+                <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" lay-verify="title" id="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+            <label class="layui-form-label">分类</label>
+            <div class="layui-input-block">
+                <input type="text" name="classify"  id="classify" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+        
+            </input>
+            </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label">取货名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="goods"  id="goods" lay-verify="required" autocomplete="off" placeholder="请输入名称" class="layui-input">
+                </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label">取货地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="get-address" id="get_address" lay-verify="required" autocomplete="off" placeholder="请输入取货地址" class="layui-input">
+                </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label">收货地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="home_address" id="home_address"lay-verify="required" autocomplete="off" placeholder="请输入收货地址" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-block">
+                    <input type="tel" name="phone" id="phone" lay-verify="required|phone" autocomplete="off" placeholder="请输入电话" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">下单人</label>
+                <div class="layui-input-block">
+                    <input type="text" name="user" id="user" lay-verify="required" autocomplete="off" placeholder="请输入姓名" class="layui-input">
+                </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">时间</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="date1" name="date_start" lay-verify="required" placeholder="开始时间" autocomplete="off" class="layui-input" >
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="date2" name="date_ending" lay-verify="required" placeholder="截止时间" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖励</label>
+                <div class="layui-input-block">
+                    <input type="text" id="reward" lay-verify="required"  autocomplete="off" placeholder="" class="layui-input">
+                </div>
+            </div>
+        
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">详细描述</label>
+                <div class="layui-input-block">
+                    <textarea id="describe" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        
+        </form>
+        
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认修改</button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/html" id="currentTableBar">
+            <!-- <a class="layui-btn layui-btn layui-btn-xs data-count-edit" lay-event="check">查看</a> -->
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑查看</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">取消订单</a>
+        </script>
+
+    </div>
+</div>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render({
+            elem: '#currentTableId',
+            url: '../api/table_waiting.json',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [[
+                {type: "checkbox", width: 50},
+                {type: "numbers", width: 50,title: '序号'},
+                {field: 'title', width: 150, title: '标题',align: "center"},
+                {field: 'goods', width: 150, title: '名称',align: "center"},
+                {field: 'classify', width: 90, title: '分类', sort: true,align: "center"},
+                {field: 'phone', width: 120, title: '联系电话',align: "center"},
+                {field: 'username', width: 150, title: '下单人',align: "center"},
+                {field: 'reward', width: 90, title: '奖励', sort: true,align: "center"},
+                {field: 'get_address', width: 100, title: '取货地址',align: "center"},
+                {field: 'home_address', width: 100, title: '收货地址',align: "center"},
+                {field: 'date_start', width: 200, title: '开始时间', sort: true},
+                {field: 'date_end', width: 200, title: '截止时间', sort: true},
+                {field: 'describe', width: 150, title: '详细描述', sort: true},
+                {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center",align: "center"}
+            ]],
+            limits: [10, 15, 20, 25, 50, 100],
+            limit: 15,
+            page: true,
+            skin: 'line'
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        /**
+         * toolbar监听事件
+         */
+        table.on('toolbar(currentTableFilter)', function (obj) {
+            if (obj.event === 'add') {  // 监听添加操作
+                var index = layer.open({
+                    title: '添加订单',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/table/add_list.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+            } else if (obj.event === 'delete') {  // 监听删除操作
+                var checkStatus = table.checkStatus('currentTableId')
+                    , data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+            }
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+        
+        //监听行工具栏
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+         
+            if (obj.event === 'edit') {
+                var index = layer.open({
+                    title: '编辑查看',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: $('.xiugai'),
+                    success:function(layero,index){
+                        $("#title").val(data.title);
+                        $("#classify").val(data.classify);
+                        $("#goods").val(data.goods);
+                        $("#get_address").val(data.get_address);
+                        $("#home_address").val(data.home_address);
+                        $("#phone").val(data.phone);
+                        $("#user").val(data.username);
+                        $("#date1").val(data.date_start);
+                         $("#date2").val(data.date_end);
+                        $("#reward").val(data.reward);
+                        $("#describe").val(data.describe);
+                    }
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } if (obj.event === 'check') {
+                var index = layer.open({
+                    title: '查看用户',
+                    type: 2,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['100%', '100%'],
+                    content: '../page/check_list.html',
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+                } 
+                        });
+
+                    });
+</script>
+
+</body>
+</html>

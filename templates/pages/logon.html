@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户注册</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/public.css" media="all">
+    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/step.css" media="all">
+    <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+
+        <div class="layui-fluid">
+            <div class="layui-card">
+                <div class="layui-card-body" style="padding-top: 40px;">
+                    <div class="layui-carousel" id="stepForm" lay-filter="stepForm" style="margin: 0 auto;">
+                        <div carousel-item>
+                            <div>
+                                <form class="layui-form" style="margin: 0 auto;max-width: 460px;padding-top: 40px;">
+                                    
+                                <div class="layui-form-item">
+                                     <label class="layui-form-label">用户名:</label>
+                                        <div class="layui-input-block">
+                                    <input type="text" name="username" id="username" placeholder="" class="layui-input" lay-verify="" required />
+
+                                      </div>   
+                                 </div>
+
+                                 <div class="layui-form-item">
+                                    <label class="layui-form-label">性别</label>
+                                    <div class="layui-input-block">
+                                        <select name="inspectSex" id="inspectSex" lay-verify="">
+                                            <option value="男" >男</option>
+                                            <option value="女" selected>女</option>
+                                          </select>  
+                                    </div>
+                                  </div>
+
+                                <div class="layui-form-item">
+                                    <div class="layui-block">
+                                    <label class="layui-form-label">密码</label>
+                                    <div class="layui-input-block">
+                                        <input type="password" name="password" id="password" id="password"  lay-verify="required|password" class="layui-input">
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-block">
+                                    <label class="layui-form-label">确认密码</label>
+                                    <div class="layui-input-block">
+                                        <input type="password" name="password_again" id="password_again" id="password_again" lay-verify="required|confirmPass" class="layui-input">
+                                    </div>
+                                    </div>
+                                </div>
+                                   
+                                
+                                <div class="layui-form-item">
+                                    <div class="layui-block">
+                                    <label class="layui-form-label">电子邮箱</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="email" id="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                </div>
+                                
+
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">人员</label>
+                                    <div class="layui-input-block">
+                                        <select name="" id="user" lay-filter="">
+                                            <option value=""></option>
+                                            <option value="users">用户</option>
+                                            <option value="is_superuser" name="is_superuser"selected="">管理员</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                   
+                            
+                                    <!-- <div class="layui-form-item">
+                                        <label class="layui-form-label">简介:</label>
+                                        <div class="layui-input-block" >
+                                            <textarea placeholder="" value="" class="layui-textarea" ></textarea>
+                                        </div>
+                                    </div> -->
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <button class="layui-btn" lay-submit lay-filter="formStep" id="formStep" style="z-index: 99;">
+                                                &emsp;下一步&emsp;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+
+
+                                <form class="layui-form" style="margin: 0 auto;max-width: 460px;padding-top: 40px;">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">真实姓名:</label>
+                                           <div class="layui-input-block">
+                                       <input type="text" name="name"  id="name" placeholder="" class="layui-input" lay-verify="" required />
+   
+                                         </div>   
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">学号:</label>
+                                           <div class="layui-input-block">
+                                       <input type="text" name="schoolnumber" id="schoolnumber" placeholder="" class="layui-input" lay-verify="" required />
+   
+                                         </div>   
+                                    </div>
+                                   
+                                   
+                                    
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block">
+                                            <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
+                                            <button class="layui-btn" lay-submit lay-filter="formStep2" id="formStep2">
+                                                &emsp;下一步&emsp;
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <div style="text-align: center;margin-top: 90px;">
+                                    <i class="layui-icon layui-circle"
+                                       style="color: white;font-size:30px;font-weight:bold;background: #52C41A;padding: 20px;line-height: 80px;">&#xe605;</i>
+                                    <div style="font-size: 24px;color: #333;font-weight: 500;margin-top: 30px;">
+                                        注册成功
+                                    </div>
+                                    <div style="font-size: 14px;color: #666;margin-top: 20px;">现可用用户名直接登陆</div>
+                                </div>
+                                <div style="text-align: center;margin-top: 50px;">
+        
+                                    <a href="../index.html"><button class="layui-btn layui-btn-primary">回到首页</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script src="../lib/layui-v2.6.3/lay-config.js" charset="utf-8"></script>
+<script>
+    layui.use([ 'form', 'step'], function () {
+        var $ = layui.$,
+            form = layui.form,
+            step = layui.step;
+
+        step.render({
+            elem: '#stepForm',
+            filter: 'stepForm',
+            width: '100%', //设置容器宽度
+            stepWidth: '750px',
+            height: '500px',
+            stepItems: [{
+                title: '填写信息'
+            }, {
+                title: '用户认证'
+            }, {
+                title: '完成'
+            }]
+        });
+
+        
+          // 校验两次密码是否一致
+           form.verify({
+              confirmPass:function(value){
+             if($('input[name=password]').val() !== value)
+            return '提示：两次输入密码不一致！';
+             }
+            });
+
+            form.verify({
+              password:[/^[a-zA-Z0-9_-]{6,16}$/,'密码格式错误']
+            });
+     
+        form.on('submit(formStep)', function (data) {
+            step.next('#stepForm');
+            return false;
+        });
+
+        form.on('submit(formStep2)', function (data) {
+            step.next('#stepForm');
+            return false;
+        });
+
+        $('.pre').click(function () {
+            step.pre('#stepForm');
+        });
+
+        $('.next').click(function () {
+            step.next('#stepForm');
+        });
+    })
+    
+    //注册接口
+    $('#formStep').click(function(){
+        $.ajax({
+            url:'/user/reg/',
+              data:{
+                  username:$("#username").val(),
+                  sex:$("#inspectSex").val(),
+                  password:$("#password").val(),
+                  password_again:$("#password_again").val(),
+                 email:$("#email").val(),
+                 user:$("#user").val()
+              },
+              type:'POST',
+              dataType:'json',
+              success:function(data){
+
+              }
+        })
+    })
+    $('#formStep2').click(function(){
+        console.log($("#name").val());
+        $.ajax({
+            url:'/user/reg/',
+              data:{
+                 name:$("#name").val(),
+                 schoolnumber:$("#schoolnumber").val()
+              },
+              type:'POST',
+              dataType:'json',
+              success:function(data){
+
+              }
+        })
+    })
+</script>
+</body>
+</html>

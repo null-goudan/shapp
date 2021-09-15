@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from model.models import User, UserInfo, WorkTable
 from django.contrib.auth import authenticate
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, HttpResponseRedirect
 import json
 
 
@@ -77,6 +77,7 @@ def log(request):
                 resdic['status'] = 1
                 resdic['msg'] = '登录成功'
                 resdic['uid'] = user.id
+                response.set_cookie('uid', user.id, max_age=3600 * 24 * 3)
                 response.set_cookie('username', username, max_age=3600*24*3)
                 response.set_cookie('password', password, max_age=3600*24*3)
             else:
@@ -86,31 +87,33 @@ def log(request):
             resdic['status'] = -1
             resdic['msg'] = '登录异常'
         res.append(resdic)
+
         response.write(json.dumps(res))
         return response
 
 
 def add(request):
+    if request.method == 'GET':
+        return HttpResponseNotFound
     if request.method == "POST":
-        req = json.loads(request.body)
-        print(req)
-        key_flag = req.get("title") and req.get("content") and len(req) == 2
-        # 判断请求体是否正确
-        if key_flag:
-            title = req["title"]
-            content = req["content"]
-            # title返回的是一个list
-            title_exist = WorkTable.objects.filter(title=title)
-            # 判断是否存在同名title
-            if len(title_exist) != 0:
-                return JsonResponse({"status": "BS.400", "msg": "title already exist,fail to publish."})
+        cookie = request.COOKIES
+        print(cookie)
+        if not cookie:
+            return HttpResponse('NO COOKIE')
+        uid = cookie.get['uid']
+        title = request.POST['title']
+        classify = request.POST['classify']
+        # goods = request.POST['goods']
+        get_address = request.POST['get_address']
+        home_address = request.POST['home_address']
+        phone = request.POST['phone']
+        # date_start = request.POST['data_start']
+        # date_ending = request.POST['date_ending']
+        reward = request.POST['reward']
+        describe = request.POST['describe']
 
-            '''插入数据'''
-            add_art = WorkTable(title=title, content=content, status="alive")
-            add_art.save()
-            return JsonResponse({"status": "BS.200", "msg": "publish article success."})
-        else:
-            return JsonResponse({"status": "BS.400", "message": "please check param."})
+        print(cookie)
+        return HttpResponse(200, title)
 
 
 def modify(request, art_id):
