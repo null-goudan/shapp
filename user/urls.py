@@ -2,10 +2,19 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('log/', views.log),
+    path('login/', views.log),
+    path('houtai_login/', views.houtai_log),
     path('reg/', views.reg),
-    path('add/', views.add),
-    path('modify', views.modify),
-    path('delete', views.delete),
-    path('showlist', views.showlist),
+    path('take/', views.add_take),
+    path('buy/', views.add_buy),
+    path('do/', views.add_do),
+    path('information/', views.infomation),
+    path('information/get/',views.information_userinfo),
+    path('password/', views.password),
+    path('send/', views.send),
+    path('send_table_info/', views.send_table_info),
+    path('help/', views.help),
+    path('order/', views.order),
+    path('get_list', views.get_list),
+
 ]

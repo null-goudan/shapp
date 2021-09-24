@@ -1,24 +1,25 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>同学助校园顺手捎网-帮我买</title>   
-    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css">
-    <script src="../lib/layui-v2.6.3/layui.js"></script>
-    <link rel="stylesheet"   href="../css/index.css"/> 
-    <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <title>同学助校园顺手捎网-帮我买</title>
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/layui.css' %}">
+    <script src="{% static 'lib/layui-v2.6.3/layui.js' %}"></script>
+    <link rel="stylesheet"   href="{% static '/css/index.css' %}"/>
+    <script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
 </head>
 <body>
     <header>     
     <div class="log">同学助校园顺手捎网</div>
     <nav>
-      <a href="../index.html">首页</a>
-      <a href="../index.html #showcases">在线接单</a>
+      <a href="/">首页</a>
+      <a href="/#showcases">在线接单</a>
       <a href=".take.html">在线下单</a>
-      <a href="./user-information.html">个人中心</a>
-      <a href="./login.html">后台登录</a>
+      <a href="/user/information">个人中心</a>
+      <a href="/houtai_login">后台登录</a>
       <a href="#"><i class="fas fa-search"></i></a> 
     </nav>
     <div class="burger">
@@ -34,20 +35,20 @@
         <div id="content-left"class="layui-col-md3" >
             <div class="content_nav">
                 <div class="nav_list">
-                    <a href="./take.html">
+                    <a href="/user/take">
                         <div class="iteml active">
-                            <img src="../img/send.png" class="sendtup" style="margin-top: 30px;">
+                            <img src="{% static '/img/send.png' %}" class="sendtup" style="margin-top: 30px;">
                             <p style="color: #fff;font-size: 18px ;margin-top: 18px">帮我取</p>
                         </div>
                     </a>
-                    <a href="./buy.html" style="margin-top: 10px;">
+                    <a href="/user/buy" style="margin-top: 10px;">
                         <div class="iteml">
-                            <img src="../img/buy_new.png" class="buytup">
+                            <img src="{% static '/img/buy_new.png' %}" class="buytup">
                             <p style="color: #fff;font-size: 18px ;margin-top: 18px">帮我买</p>
                         </div></a>
-                        <a href="./do.html" style="margin-top: 10px;">
+                        <a href="/user/do" style="margin-top: 10px;">
                             <div class="iteml">
-                                <img src="../img/help.png" class="helptup">
+                                <img src="{% static '/img/help.png' %}" class="helptup">
                                 <p style="color: #fff;font-size: 18px ;margin-top: 18px">帮我做</p>
                             </div>
                         </a>

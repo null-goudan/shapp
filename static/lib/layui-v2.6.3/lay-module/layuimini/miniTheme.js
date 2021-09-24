@@ -291,21 +291,21 @@ layui.define(["jquery", "layer"], function (exports) {
             }
             var bgcolorData = miniTheme.config(bgcolorId);
             var styleHtml = '/*头部右侧背景色 headerRightBg */\n' +
-                '.layui-layout-admin .layui-header {\n' +
+                '.layui-layout-admin_site .layui-header {\n' +
                 '    background-color: ' + bgcolorData.headerRightBg + ' !important;\n' +
                 '}\n' +
                 '\n' +
                 '/*头部右侧选中背景色 headerRightBgThis */\n' +
-                '.layui-layout-admin .layui-header .layuimini-header-content > ul > .layui-nav-item.layui-this, .layuimini-tool i:hover {\n' +
+                '.layui-layout-admin_site .layui-header .layuimini-header-content > ul > .layui-nav-item.layui-this, .layuimini-tool i:hover {\n' +
                 '    background-color: ' + bgcolorData.headerRightBgThis + ' !important;\n' +
                 '}\n' +
                 '\n' +
                 '/*头部右侧字体颜色 headerRightColor */\n' +
-                '.layui-layout-admin .layui-header .layui-nav .layui-nav-item a {\n' +
+                '.layui-layout-admin_site .layui-header .layui-nav .layui-nav-item a {\n' +
                 '    color:  ' + bgcolorData.headerRightColor + ';\n' +
                 '}\n' +
                 '/**头部右侧下拉字体颜色 headerRightChildColor */\n' +
-                '.layui-layout-admin .layui-header .layui-nav .layui-nav-item .layui-nav-child a {\n' +
+                '.layui-layout-admin_site .layui-header .layui-nav .layui-nav-item .layui-nav-child a {\n' +
                 '    color:  ' + bgcolorData.headerRightChildColor + '!important;\n' +
                 '}\n'+
                 '\n' +
@@ -325,23 +325,23 @@ layui.define(["jquery", "layer"], function (exports) {
                 '}\n' +
                 '\n' +
                 '/**头部右侧更多下拉配置色 headerRightNavMoreBg headerRightNavMoreColor */\n' +
-                '.layui-header .layui-nav .layui-nav-child dd.layui-this a, .layui-header .layui-nav-child dd.layui-this, .layui-layout-admin .layui-header .layui-nav .layui-nav-item .layui-nav-child .layui-this a {\n' +
+                '.layui-header .layui-nav .layui-nav-child dd.layui-this a, .layui-header .layui-nav-child dd.layui-this, .layui-layout-admin_site .layui-header .layui-nav .layui-nav-item .layui-nav-child .layui-this a {\n' +
                 '    background-color: ' + bgcolorData.headerRightNavMoreBg + ' !important;\n' +
                 '    color:' + bgcolorData.headerRightNavMoreColor + ' !important;\n' +
                 '}\n' +
                 '\n' +
                 '/*头部缩放按钮样式 headerRightToolColor */\n' +
-                '.layui-layout-admin .layui-header .layuimini-tool i {\n' +
+                '.layui-layout-admin_site .layui-header .layuimini-tool i {\n' +
                 '    color: ' + bgcolorData.headerRightToolColor + ';\n' +
                 '}\n' +
                 '\n' +
                 '/*logo背景颜色 headerLogoBg */\n' +
-                '.layui-layout-admin .layuimini-logo {\n' +
+                '.layui-layout-admin_site .layuimini-logo {\n' +
                 '    background-color: ' + bgcolorData.headerLogoBg + ' !important;\n' +
                 '}\n' +
                 '\n' +
                 '/*logo字体颜色 headerLogoColor */\n' +
-                '.layui-layout-admin .layuimini-logo h1 {\n' +
+                '.layui-layout-admin_site .layuimini-logo h1 {\n' +
                 '    color: ' + bgcolorData.headerLogoColor + ';\n' +
                 '}\n' +
                 '\n' +

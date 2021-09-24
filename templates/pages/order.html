@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同学助校园顺手捎网-在线接单</title> 
+   
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/index.css' %}">
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/layui.css' %}">
+    <script src="{% static '/lib/layui-v2.6.3/layui.js' %}"></script>
+     <link
+      href="https://cdn.bootcss.com/font-awesome/5.13.0/css/all.css"
+      rel="stylesheet"
+    />
+     
+</head>
+<body>
+  <header>
+    <div class="log">同学助校园顺手捎网</div>
+    <nav style="color: black;">
+      <a href="/" >首页</a>
+      <a href="/user/order">在线接单</a>
+      <a href="/user/take">在线下单</a>
+      <a href="/user/information">个人中心</a>
+      <a href="/user/houtai_login">后台登录</a>
+    </nav>
+    <div class="burger">
+      <div class="burger-line1"></div>
+      <div class="burger-line2"></div>
+      <div class="burger-line3"></div>
+    </div>
+  </header>
+
+  <section id="company-activities" class="company-activities" style="margin:50px auto;">
+    <h2 class="title1">在线接单</h2>
+    <p class="intro" style="margin-bottom: 10px;"></p> 
+    <div class="activities cases" id="order">
+    </div>
+  </section>
+
+ <!-- 查看单子详情 -->
+    <div class="xiugai layui-form layuimini-form" hidden="hidden">   
+       <form class="layui-form layui-form-pane" action="">
+                <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" lay-verify="title" id="title" autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+            <label class="layui-form-label">分类</label>
+            <div class="layui-input-block">
+                <input type="text" name="classify"  id="classify" lay-verify="required" autocomplete="off" readonly="true"class="layui-input">
+        
+            </input>
+            </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label">取货名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="goods"  id="goods" lay-verify="required" autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label">取货地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="get-address" id="get_address" lay-verify="required" autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>       
+            <div class="layui-form-item">
+                <label class="layui-form-label">收货地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="home_address" id="home_address"lay-verify="required" autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-block">
+                    <input type="tel" name="phone" id="phone" lay-verify="required|phone" autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>
+            
+            <div class="layui-form-item">
+                <label class="layui-form-label">下单人</label>
+                <div class="layui-input-block">
+                    <input type="text" name="user" id="username" lay-verify="required" autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">时间</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="date1" name="date_start" lay-verify="required" readonly="true" autocomplete="off" class="layui-input" >
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input type="text" id="date2" name="date_ending" lay-verify="required" readonly="true" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖励</label>
+                <div class="layui-input-block">
+                    <input type="text" id="reward" lay-verify="required"  autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>
+        
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">详细描述</label>
+                <div class="layui-input-block">
+                    <textarea id="describe" readonly="true" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        
+        </form>
+        
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal order" >我要接单</button>
+                </div>
+            </div>
+   </div>
+</body>
+
+<script src="{% static 'lib/template-web.js' %}"></script>
+<script src="{% static 'lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'static/libs/isotope/isotope.pkgd.min.js' %}"></script>
+
+{% verbatim %}
+<!-- template模板 -->
+<script id="tp1" type="text/html">
+ {{each data  value i}} 
+   {{if data[i].classify=="帮我取"}}
+   <div class="activity">  
+     <em style="display: none;">{{i}}</em>
+    <div class="act-image-wrapper">
+      <img src="{% static 'static/images/take-bg1.png' %}" alt="">
+    </div>           
+    <h2 class="act-title" style="margin-top: 30px;">{{data[i].title}}</h2>
+    <article>
+      {{data[i].describe}}
+    </article>
+    <div class="jiage" style="display: inline-block;">
+      <span>￥ <strong>{{data[i].reward}}</strong> </span>                       
+  </div>
+    <button class="read-more-btn" style="margin-left: 80px;">阅读更多</button>
+    <span style="display: none;">{{i}}</span>
+    <div class="meta" style="margin-left: 70px;">
+      <p class="data-published">
+        <i class="far fa-calendar" style="margin-left: -20px;"></i>
+        {{data[i].date_start}}         
+      </p>
+    </div>
+    </div>
+    {{else if data[i].classify=="帮我买"}}
+    <div class="activity"> 
+      <em style="display: none;">{{i}}</em>   
+      <div class="act-image-wrapper">
+        <img src="{% static 'static/images/buy-bg1.png' %}" alt="">
+      </div>           
+      <h2 class="act-title" style="margin-top: 30px;">{{data[i].title}}</h2>
+      <article>
+        {{data[i].describe}}
+      </article>
+      <div class="jiage" style="display: inline-block;">
+        <span>￥ <strong>{{data[i].reward}}</strong> </span>                       
+    </div>
+      <button class="read-more-btn" style="margin-left: 80px;">阅读更多</button>
+      <span style="display: none;">{{i}}</span>
+      <div class="meta" style="margin-left: 70px;">
+        <p class="data-published">
+          <i class="far fa-calendar" style="margin-left: -20px;"></i>
+          {{data[i].date_start}}         
+        </p>
+      </div>
+  </div> 
+  {{else }}
+  <div class="activity">  
+    <em style="display: none;">{{i}}</em>
+    <div class="act-image-wrapper">
+      <img src="{% static 'static/images/do-bg1.png' %}" alt="">
+    </div>           
+    <h2 class="act-title" style="margin-top: 30px;">{{data[i].title}}</h2>
+    <article>
+      {{data[i].describe}}
+    </article>
+    <div class="jiage" style="display: inline-block;">
+      <span>￥ <strong>{{data[i].reward}}</strong> </span>                       
+  </div>
+    <button class="read-more-btn" style="margin-left: 80px;">阅读更多</button>
+    <span style="display: none;">{{i}}</span>
+    <div class="meta" style="margin-left: 70px;">
+      <p class="data-published">
+        <i class="far fa-calendar" style="margin-left: -20px;"></i>
+        {{data[i].date_start}}         
+      </p>
+    </div>
+</div> 
+  {{/if}}
+  {{/each}} 
+</script>
+{% endverbatim %}
+
+<script>
+        //  显示订单接口
+         $.ajax({
+              url:'/user/get_list',
+              // type:'POST',
+              dataType:'json',
+              success:function(data){
+                   //拼接模板
+                  var html=template('tp1',data);
+                  document.getElementById('order').innerHTML=html;
+                  
+                    //查看单子详情        
+                  layui.use(['form', 'table'], function (){
+                    var $ = layui.jquery,
+                    form = layui.form,
+                    table = layui.table;                  
+                    $(".read-more-btn").on("click",function(){
+                      var number=$(this).next("span").text();                   
+                    var index= layer.open({
+                    title: '订单详情',
+                    type: 1,
+                    shade: 0,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '50%'],
+                    content: $('.xiugai'),
+                    success: function(layero, index){
+                        $("#title").val(data.data[number].title)
+                        $("#classify").val(data.data[number].classify);
+                        $("#goods").val(data.data[number].goods);
+                        $("#get_address").val(data.data[number].get_address);
+                        $("#home_address").val(data.data[number].home_address);
+                        $("#phone").val(data.data[number].phone);
+                        $("#username").val(data.data[number].username);
+                        $("#date1").val(data.data[number].date_start);
+                        $("#date2").val(data.data[number].date_end);
+                        $("#reward").val(data.data[number].reward);
+                        $("#describe").val(data.data[number].describe);
+                        }                 
+                      });                                
+                    })
+                  })      
+                 
+                  // 接单接口
+                 $(".order").on("click",function(){ 
+                layer.confirm('确认要接单吗', function () {                  
+                                $.ajax({
+                                    url:'../admin/api/table_waiting.json',
+                                    // type:'POST',
+                                    dataType:'json',
+                                    success:function(obj){
+                                       layer.msg('接单成功'); 
+                                       layer.closeAll('page');
+                                    }
+                                })                               
+                            });
+                          })
+              }
+         })
+
+        
+</script>
+</html>

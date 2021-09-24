@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <meta charset="UTF-8">
@@ -9,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/layui.css' %}" media="all">
     <style>
         html, body {width: 100%;height: 100%;overflow: hidden}
         body {background: #1E9FFF;}
@@ -45,9 +46,9 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-icon layui-icon-vercode" for="captcha"></label>
-                    <input type="text" name="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" value="xszg">
+                    <input type="text" name="captcha" id="captcha" lay-verify="required|captcha" placeholder="图形验证码" autocomplete="off" class="layui-input verification captcha" value="xszg">
                     <div class="captcha-img">
-                        <img id="captchaPic" src="../img/captcha.jpg">
+                        <img id="captchaPic" src="{% static '/img/captcha.jpg' %}">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -60,9 +61,9 @@
         </div>
     </div>
 </div>
-<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
-<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+<script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}" charset="utf-8"></script>
+<script src="{% static '/lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script src="{% static '/lib/jq-module/jquery.particleground.min.js' %}" charset="utf-8"></script>
 <script>
     layui.use(['form'], function () {
         var form = layui.form,
@@ -94,17 +95,13 @@
                 layer.msg('验证码不能为空');
                 return false;
             }
-            layer.msg('登录成功', function () {
-                window.location = '../index1.html';
-            });
             return false;
         });
     });
-
      //登录接口
      $('#login').click(function(){
          $.ajax({
-              url:'/user/log/',
+              url:'/user/login/',
               data:{
                   username:$("#username").val(),
                   password:$("#password").val(),
@@ -113,7 +110,14 @@
               type:'POST',
               dataType:'json',
               success:function(data){
-                  
+                  console.log(data[0]['status'])
+                  if(data[0]['status']!==1){
+                      layui.msg(data[0]['msg'].toString())
+                  }
+                  else if(data[0]['status']===1){
+                      console.log('success')
+                      window.location.replace('/')
+                  }
               }
          })
      })

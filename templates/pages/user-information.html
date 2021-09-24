@@ -1,24 +1,26 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>同学助校园顺手捎网-个人中心</title>
-    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css">  
-    <script src="../lib/layui-v2.6.3/layui.js"></script>
-    <link rel="stylesheet"   href="../css/index.css"/> 
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/layui.css' %}">
+    <script src="{% static '/lib/layui-v2.6.3/layui.js' %}"></script>
+    <link rel="stylesheet"   href="{% static '/css/index.css' %}"/>
+    <script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
 </head>
 <body>
      
   <header>
     <div class="log">同学助校园顺手捎网</div>
     <nav>
-      <a href="../index.html">首页</a>
-      <a href="../index.html #showcases">在线接单</a>
-      <a href="./take.html">在线下单</a>
-      <a href="./user-information.html">个人中心</a>
-      <a href="./login.html">后台登录</a>
+      <a href="/">首页</a>
+      <a href="/#showcases">在线接单</a>
+      <a href="/take">在线下单</a>
+      <a href="/user/information">个人中心</a>
+      <a href="/user/houtai_login">后台登录</a>
       <a href="#"><i class="fas fa-search"></i></a> 
     </nav>
     <div class="burger">
@@ -41,10 +43,10 @@
                 <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
                    
                   <li class="layui-nav-item " style="background-color: #4E5465;" ><a href=""style="width:195px; ">我的信息</a></li>
-                  <li class="layui-nav-item"><a href="./user-send.html" style="width: 195px;">我发出的</a></li>
-                  <li class="layui-nav-item"><a href="./user-help.html" style="width: 195px;">我帮助的</a></li>
+                  <li class="layui-nav-item"><a href="/user/send" style="width: 195px;">我发出的</a></li>
+                  <li class="layui-nav-item"><a href="/user/help" style="width: 195px;">我帮助的</a></li>
                   <li class="layui-nav-item"><a href="" style="width: 195px;">我的积分</a></li>
-                  <li class="layui-nav-item"><a href="./user-password.html" style="width: 195px;">修改密码</a></li>
+                  <li class="layui-nav-item"><a href="/user/password" style="width: 195px;">修改密码</a></li>
                 </ul>
         
             
@@ -69,32 +71,32 @@
                 <tbody>
                   <tr>
                     <td>用户名</td>
-                    <td>user-1</td>
+                    <td id="username">user-1</td>
                   </tr>
                   
                   <tr>
                     <td>真实姓名</td>
-                    <td>张三</td>
+                    <td id="name">张三</td>
                   </tr>
 
                   <tr>
                     <td>性别</td>
-                    <td>男</td>
+                    <td id="sex">男</td>
                   </tr>
 
                   <tr>
                     <td>学号</td>
-                    <td>541107090222</td>
+                    <td id="student_num">541107090222</td>
                   </tr>
 
                   <tr>
                     <td>电子邮箱</td>
-                    <td>1161400732@qq.com</td>
+                    <td id="email">1161400732@qq.com</td>
                   </tr>
 
                   <tr>
                     <td>余额</td>
-                    <td>1000</td>
+                    <td id="money">1000</td>
                   </tr>
                 </tbody>
               </table>
@@ -157,6 +159,22 @@
           </div>
         </div>
       </footer>
+      <script rel="script">
+            $.ajax({
+                    url: '/user/information/get/',
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#username').text(data['username'])
+                        $('#name').text(data['name'])
+                        $('#sex').text(data['sex'])
+                        $('#email').text(data['email'])
+                        $('#student_num').text(data['stu_num'])
+                        $('#money').text(data['money'])
+                    }
+                }
+            )
+        </script>
      
 
       <script>

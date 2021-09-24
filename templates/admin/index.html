@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <meta charset="utf-8">
@@ -10,11 +11,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="lib/layui-v2.6.3/css/layui.css" media="all">
-    <link rel="stylesheet" href="css/layuimini.css?v=2.0.4.2" media="all">
-    <link rel="stylesheet" href="css/themes/default.css" media="all">
-    <link rel="stylesheet" href="lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="icon" href="{% static 'admin/images/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'admin/lib/layui-v2.6.3/css/layui.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'admin/css/layuimini.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'admin/css/themes/default.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'admin/lib/font-awesome-4.7.0/css/font-awesome.min.css' %}" media="all">
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -115,8 +116,8 @@
 
     </div>
 </div>
-<script src="lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+<script src="{% static 'admin/lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script src="{% static 'admin/js/lay-config.js' %}" charset="utf-8"></script>
 <script>
     layui.use(['jquery', 'layer', 'miniAdmin','miniTongji'], function () {
         var $ = layui.jquery,
@@ -125,8 +126,8 @@
             miniTongji = layui.miniTongji;
 
         var options = {
-            iniUrl: "api/init.json",    // 初始化接口
-            clearUrl: "api/clear.json", // 缓存清理接口
+            iniUrl: "{% static 'admin/api/init.json' %}",    // 初始化接口
+            clearUrl: "{% static 'admin/api/clear.json' %}", // 缓存清理接口
             urlHashLocation: true,      // 是否打开hash定位
             bgColorDefault: false,      // 主题默认配置
             multiModule: true,          // 是否开启多模块

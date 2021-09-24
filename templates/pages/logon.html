@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <meta charset="utf-8">
@@ -6,10 +7,10 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css" media="all">
-    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/public.css" media="all">
-    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/step.css" media="all">
-    <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/layui.css' %}" media="all">
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/public.css' %}" media="all">
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/step.css' %}" media="all">
+    <script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
 </head>
 <body>
 <div class="layuimini-container">
@@ -31,15 +32,15 @@
                                       </div>   
                                  </div>
 
-                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">性别</label>
-                                    <div class="layui-input-block">
-                                        <select name="inspectSex" id="inspectSex" lay-verify="">
-                                            <option value="男" >男</option>
-                                            <option value="女" selected>女</option>
-                                          </select>  
-                                    </div>
-                                  </div>
+<!--                                 <div class="layui-form-item">-->
+<!--                                    <label class="layui-form-label">性别</label>-->
+<!--                                    <div class="layui-input-block">-->
+<!--                                        <select name="inspectSex" id="inspectSex" lay-verify="">-->
+<!--                                            <option value="男" >男</option>-->
+<!--                                            <option value="女" selected>女</option>-->
+<!--                                          </select>  -->
+<!--                                    </div>-->
+<!--                                  </div>-->
 
                                 <div class="layui-form-item">
                                     <div class="layui-block">
@@ -75,7 +76,7 @@
                                         <select name="" id="user" lay-filter="">
                                             <option value=""></option>
                                             <option value="users">用户</option>
-                                            <option value="is_superuser" name="is_superuser"selected="">管理员</option>
+                                            <option value="is_superuser" name="is_superuser" selected="">管理员</option>
                                         </select>
                                     </div>
                                 </div>
@@ -95,6 +96,7 @@
                                         </div>
                                     </div>
                                 </form>
+
                             </div>
                             <div>
 
@@ -105,7 +107,21 @@
                                            <div class="layui-input-block">
                                        <input type="text" name="name"  id="name" placeholder="" class="layui-input" lay-verify="" required />
    
-                                         </div>   
+                                         </div>
+
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">性别:</label>
+                                        <div class="layui-input-block" id="sex">
+                                              <input type="radio" name="sex" value="男" title="男">
+                                              <input type="radio" name="sex" value="女" title="女" checked>
+                                            </div>
+                                         </div>
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">年龄:</label>
+                                           <div class="layui-input-block">
+                                       <input type="text" name="age"  id="age" placeholder="" class="layui-input" lay-verify="" required />
+                                         </div>
                                     </div>
 
                                     <div class="layui-form-item">
@@ -115,7 +131,6 @@
    
                                          </div>   
                                     </div>
-                                   
                                    
                                     
                                     <div class="layui-form-item">
@@ -139,7 +154,7 @@
                                 </div>
                                 <div style="text-align: center;margin-top: 50px;">
         
-                                    <a href="../index.html"><button class="layui-btn layui-btn-primary">回到首页</button></a>
+                                    <a href="/"><button class="layui-btn layui-btn-primary">回到首页</button></a>
                                 </div>
                             </div>
                         </div>
@@ -151,8 +166,8 @@
 
     </div>
 </div>
-<script src="../lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="../lib/layui-v2.6.3/lay-config.js" charset="utf-8"></script>
+<script src="{% static '/lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
+<script src="{% static '/lib/layui-v2.6.3/lay-config.js' %}" charset="utf-8"></script>
 <script>
     layui.use([ 'form', 'step'], function () {
         var $ = layui.$,
@@ -212,11 +227,11 @@
             url:'/user/reg/',
               data:{
                   username:$("#username").val(),
-                  sex:$("#inspectSex").val(),
                   password:$("#password").val(),
                   password_again:$("#password_again").val(),
                  email:$("#email").val(),
-                 user:$("#user").val()
+                 user:$("#user").val(),
+                  step: 1
               },
               type:'POST',
               dataType:'json',
@@ -231,7 +246,10 @@
             url:'/user/reg/',
               data:{
                  name:$("#name").val(),
-                 schoolnumber:$("#schoolnumber").val()
+                 schoolnumber:$("#schoolnumber").val(),
+                  age:$("#age").val(),
+                  sex:$("#sex").val(),
+                  step: 2
               },
               type:'POST',
               dataType:'json',

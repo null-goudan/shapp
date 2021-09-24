@@ -22,6 +22,7 @@ class User(AbstractUser):
     新加指向用户信息表的外键
     """
     userinfo = models.ForeignKey(UserInfo, on_delete=models.CASCADE, null=True, blank=True)
+    is_formal = models.BooleanField('是否是正式用户', default=False)
 
 
 class WorkTable(models.Model):
@@ -50,6 +51,6 @@ class TableDeal(models.Model):
     交易信息表
     """
     User_request = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User_request')  # 需求方，发布单子的用户
-    User_receive = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User_receive')  # 接收方，接受单子的用户
+    User_receive = models.ForeignKey(User, on_delete=models.CASCADE, related_name='User_receive', null=True)  # 接收方，接受单子的用户
     isActive = models.BooleanField(default=False)   # 方便删除
     Table = models.ForeignKey(WorkTable, on_delete=models.CASCADE)  # 指向表的信息

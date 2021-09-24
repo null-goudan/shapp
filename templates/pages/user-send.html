@@ -1,24 +1,25 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>同学助校园顺手捎网-个人中心</title>
-    <link rel="stylesheet" href="../lib/layui-v2.6.3/css/layui.css">
-    <script src="../lib/layui-v2.6.3/layui.js"></script>
-    <link rel="stylesheet"   href="../css/index.css"/> 
-    <script src='../lib/jquery-3.4.1/jquery-3.4.1.min.js'></script>
+    <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/layui.css' %}">
+    <script src="{% static '/lib/layui-v2.6.3/layui.js' %}"></script>
+    <link rel="stylesheet"   href="{% static '/css/index.css' %}"/>
+    <script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
 </head>
 <body>
     <header>
         <div class="log">同学助校园顺手捎网</div>
         <nav>
-          <a href="../index.html">首页</a>
-          <a href="../index.html #showcases">在线接单</a>
-          <a href="./take.html">在线下单</a>
-          <a href="./user-information.html">个人中心</a>
-          <a href="./login.html">后台登录</a>
+          <a href="/">首页</a>
+          <a href="/#showcases">在线接单</a>
+          <a href="/take">在线下单</a>
+          <a href="/user/information">个人中心</a>
+          <a href="/houtai_login">后台登录</a>
           <a href="#"><i class="fas fa-search"></i></a> 
         </nav>
         <div class="burger">
@@ -43,14 +44,14 @@
              <ul class="layui-nav layui-nav-tree "lay-filter="test" style="width: 100%;margin-bottom: 20px;">
   
                    
-                  <li class="layui-nav-item " ><a href="./user-information.html"style="width:268px; ">我的信息</a></li>
+                  <li class="layui-nav-item " ><a href="/user/information" style="width:268px; ">我的信息</a></li>
                   
                   <li class="layui-nav-item layui-nav-itemed" style="background-color: #4E5465;">
-                    <a href="./user-send.html" style="width: 268px;">我发出的</a>
+                    <a href="/user/send" style="width: 268px;">我发出的</a>
                 </li>
-                  <li class="layui-nav-item"><a href="./user-help.html" style="width: 268px;">我帮助的</a></li>
+                  <li class="layui-nav-item"><a href="/user/help" style="width: 268px;">我帮助的</a></li>
                   <li class="layui-nav-item"><a href="" style="width: 268px;">我的积分</a></li>
-                  <li class="layui-nav-item" ><a href="./user-password.html" style="width: 268px;">修改密码</a></li>
+                  <li class="layui-nav-item" ><a href="/user/password" style="width: 268px;">修改密码</a></li>
                 </ul>
         
             
@@ -212,8 +213,7 @@
                   //加载表单数据，单子详情接口
                     table.render({
                         elem: '#currentTableId',
-                        url: '/admin/api/table_waiting.json',
-                        // method:'post',
+                        url: '/user/send_table_info/',
                        
                         cols: [[
                         {type: "checkbox", width: 50},
@@ -226,7 +226,7 @@
                         {field: 'runer', width: 100, title: '接单人',align: "center"},
                         {field: 'reward', width: 100, title: '奖励', sort: true,align: "center"},
                         {field: 'date_start', width: 200, title: '接单时间', sort: true,hide:true},  
-                        {field: 'date_end', width: 200, title: '截止时间', sort: true,hide:true},
+                        {field: 'date_ending', width: 200, title: '截止时间', sort: true,hide:true},
                         {field: 'get_address', width: 100, title: '取货地址',align: "center",hide:true},
                         {field: 'home_address', width: 100, title: '收货地址',align: "center",hide:true},
                         {field: 'describe', width: 150, title: '详细描述', sort: true,hide:true},
@@ -287,7 +287,7 @@
                                     $("#home_address").val(data.home_address);
                                     $("#phone").val(data.phone);
                                     $("#date1").val(data.date_start);
-                                    $("#date2").val(data.date_end);
+                                    $("#date2").val(data.date_ending);
                                     $("#reward").val(data.reward);
                                     $("#describe").val(data.describe);
                                 }
@@ -317,7 +317,7 @@
                         else if (obj.event === 'delete') {
                             layer.confirm('确认删除该订单吗', function (index) {
                                 $.ajax({
-                                    url:'',
+                                    url:'/user/delete/',
                                     data:{
                                         id:obj.data.id
                                     },
@@ -382,7 +382,7 @@
         </div>
       </footer>
      
-        <script src="../lib/layui-v2.6.3/lay-config.js?v=1.0.4" charset="utf-8"></script>
+        <script src="{% static 'lib/layui-v2.6.3/lay-config.js?v=1.0.4' %}" charset="utf-8"></script>
 
       <script>
       //注意：导航 依赖 element 模块，否则无法进行功能性操作
