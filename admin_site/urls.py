@@ -3,5 +3,13 @@ from . import views
 
 urlpatterns = [
     path('', views.index),
-    path('welcome', views.welcome),
+    path('welcome/', views.welcome),
+    path('table_user/', views.table_user),
+    path('table_doing/', views.table_doing),
+    path('table_finish/', views.table_finish),
+    path('table_waiting/', views.table_waiting),
+    path('user-setting', views.user_setting),
+    path('user-password', views.user_password),
+    path('editor/', views.editor),
+
 ]

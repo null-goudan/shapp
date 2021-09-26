@@ -10,6 +10,28 @@
     <link rel="stylesheet" href="{% static 'admin/lib/layui-v2.6.3/css/layui.css' %}" media="all">
     <link rel="stylesheet" href="{% static 'admin/lib/font-awesome-4.7.0/css/font-awesome.min.css' %}" media="all">
     <link rel="stylesheet" href="{% static 'admin/css/public.css' %}" media="all">
+    <script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
+<script rel="script">
+        $.ajax({
+            url: '/admin_site/welcome/',
+            method: 'POST',
+            data:{
+              msg:'get_info',
+            },
+            success: function (data){
+                console.log(data);
+                data = $.parseJSON(data);
+                let user_count = data['user_count'];
+                let table_waiting_count = data['table_waiting_count']
+                let table_doing_count = data['table_doing_count']
+                let table_finish_count = data['table_finish_count']
+                $(".user-count").text(user_count);
+                $(".table_waiting_count").text(table_waiting_count)
+                $(".table_finish_count").text(table_finish_count)
+                $(".table_doing_count").text(table_doing_count)
+            }
+        })
+    </script>
 </head>
 <style>
     .layui-top-box {padding:40px 20px 20px 20px;color:#fff}
@@ -36,7 +58,7 @@
             <div class="layui-col-md3">
                 <div class="col-xs-6 col-md-3">
                  
-                    <a href="./table_user.html">
+                    <a href="/admin_site/table_user">
                           <div class="panel layui-bg-cyan">                       
                         <div class="panel-body">
                             <div class="panel-title">
@@ -44,8 +66,8 @@
                                 <h5>用户统计</h5>
                             </div>
                             <div class="panel-content">
-                                <h1 class="no-margins">1234</h1>
-                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <h1 class="no-margins user-count">0</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> <span class="user-count">0</span></div>
                                 <small>当前分类总记录数</small>
                             </div>
                         </div>                 
@@ -59,7 +81,7 @@
             <div class="layui-col-md3">
                 <div class="col-xs-6 col-md-3">
                    
-                    <a href="../page/table_waiting.html">
+                    <a href="/admin_site/table_waiting">
                         <div class="panel layui-bg-blue">
                         <div class="panel-body">
                             <div class="panel-title">
@@ -67,8 +89,8 @@
                                 <h5>待完成订单统计</h5>
                             </div>
                             <div class="panel-content">
-                                <h1 class="no-margins">1234</h1>
-                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <h1 class="no-margins table_waiting_count">0</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> <span class="table_waiting_count">0</span></div>
                                 <small>当前分类总记录数</small>
                             </div>
                         </div>
@@ -82,7 +104,7 @@
             <div class="layui-col-md3">
                 <div class="col-xs-6 col-md-3">
                   
-                    <a href="./table_doing.html"> 
+                    <a href="/admin_site/table_doing">
                         <div class="panel layui-bg-green">
                         <div class="panel-body">
                             <div class="panel-title">
@@ -90,8 +112,8 @@
                                 <h5>完成中订单统计</h5>
                             </div>
                             <div class="panel-content">
-                                <h1 class="no-margins">1234</h1>
-                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <h1 class="no-margins table_doing_count">0</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> <span class="table_doing_count">0</span></div>
                                 <small>当前分类总记录数</small>
                             </div>
                         </div>
@@ -104,7 +126,7 @@
             <div class="layui-col-md3">
                 <div class="col-xs-6 col-md-3">
                    
-                    <a href="./table_finish.html"> 
+                    <a href="/admin_site/table_finish">
                         <div class="panel layui-bg-orange">
                         <div class="panel-body">
                             <div class="panel-title">
@@ -112,8 +134,8 @@
                                 <h5>已完成订单统计</h5>
                             </div>
                             <div class="panel-content">
-                                <h1 class="no-margins">1234</h1>
-                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> 1234</div>
+                                <h1 class="no-margins table_finish_count">0</h1>
+                                <div class="stat-percent font-bold text-gray"><i class="fa fa-commenting"></i> <span class="table_finish_count">0</span></div>
                                 <small>当前分类总记录数</small>
                             </div>      
                         </div>
@@ -130,5 +152,4 @@
 </div>
 <script src="{% static '/lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 </body>
-
 </html>
