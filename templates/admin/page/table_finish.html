@@ -180,7 +180,8 @@
 
         table.render({
             elem: '#currentTableId',
-            url: '../api/table_finish.json',
+            url: '/admin_site/table_finish/',
+            method:'post',
             toolbar: '#toolbarDemo',
             defaultToolbar: ['filter', 'exports', 'print', {
                 title: '提示',

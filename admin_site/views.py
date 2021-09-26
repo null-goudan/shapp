@@ -2,6 +2,17 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from model.models import User, TableDeal, UserInfo, WorkTable
 import json
+from datetime import date, datetime
+
+
+class ComplexEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%d %H:%M:%S')
+        elif isinstance(obj, date):
+            return obj.strftime('%Y-%m-%d')
+        else:
+            return json.JSONEncoder.default(self, obj)
 
 
 # Create your views here.
@@ -85,16 +96,108 @@ def table_user(request):
 def table_doing(request):
     if request.method == 'GET':
         return render(request, 'admin/page/table_doing.html')
+    if request.method == 'POST':
+        response = HttpResponse()
+        res = {}
+        itemlist = []
+        tables = TableDeal.objects.all()
+        for table in tables:
+            user = User.objects.get(id=table.User_request_id)
+            tableinfo = WorkTable.objects.get(id=table.Table_id)
+            if not tableinfo.isAccept:
+                pass
+            elif not tableinfo.isFinished:
+                _dict = {
+                    'title': tableinfo.title,
+                    'goods': tableinfo.goods,
+                    'classify': tableinfo.classify,
+                    'phone': tableinfo.phone,
+                    'username': user.username,
+                    'reward': tableinfo.back,
+                    'get_address': tableinfo.get_address,
+                    'home_address': tableinfo.home_address,
+                    'date_start': str(tableinfo.date_start),
+                    'date_end': str(tableinfo.date_ending),
+                    'describe': tableinfo.describe,
+                }
+                itemlist.append(_dict)
+        res = {
+            'code': 0,
+            'msg': '成功',
+            'data': itemlist
+        }
+        response.write(json.dumps(res, cls=ComplexEncoder))
+        return response
 
 
 def table_finish(request):
     if request.method == 'GET':
         return render(request, 'admin/page/table_finish.html')
+    if request.method == 'POST':
+        response = HttpResponse()
+        res = {}
+        itemlist = []
+        tables = TableDeal.objects.all()
+        for table in tables:
+            user = User.objects.get(id=table.User_request_id)
+            tableinfo = WorkTable.objects.get(id=table.Table_id)
+            if tableinfo.isFinished:
+                _dict = {
+                    'title': tableinfo.title,
+                    'goods': tableinfo.goods,
+                    'classify': tableinfo.classify,
+                    'phone': tableinfo.phone,
+                    'username': user.username,
+                    'reward': tableinfo.back,
+                    'get_address': tableinfo.get_address,
+                    'home_address': tableinfo.home_address,
+                    'date_start': str(tableinfo.date_start),
+                    'date_end': str(tableinfo.date_ending),
+                    'describe': tableinfo.describe,
+                }
+                itemlist.append(_dict)
+        res = {
+            'code': 0,
+            'msg': '成功',
+            'data': itemlist
+        }
+        response.write(json.dumps(res, cls=ComplexEncoder))
+        return response
 
 
 def table_waiting(request):
     if request.method == 'GET':
         return render(request, 'admin/page/table_waiting.html')
+    if request.method == 'POST':
+        response = HttpResponse()
+        res = {}
+        itemlist = []
+        tables = TableDeal.objects.all()
+        for table in tables:
+            user = User.objects.get(id=table.User_request_id)
+            tableinfo = WorkTable.objects.get(id=table.Table_id)
+            if not tableinfo.isAccept:
+                _dict = {
+                    'title': tableinfo.title,
+                    'goods': tableinfo.goods,
+                    'classify': tableinfo.classify,
+                    'phone': tableinfo.phone,
+                    'username': user.username,
+                    'reward': tableinfo.back,
+                    'get_address': tableinfo.get_address,
+                    'home_address': tableinfo.home_address,
+                    'date_start': tableinfo.date_start,
+                    'date_end': tableinfo.date_ending,
+                    'describe': tableinfo.describe,
+                }
+                itemlist.append(_dict)
+        res = {
+            'code': 0,
+            'msg': '成功',
+            'data': itemlist
+        }
+        response.write(json.dumps(res, cls=ComplexEncoder))
+        return response
 
 
 def user_setting(request):
