@@ -237,7 +237,7 @@
 <script>
         //  显示订单接口
          $.ajax({
-              url:'/user/get_list/',
+              url:'/user/order_list/',
               // type:'POST',
               dataType:'json',
               success:function(data){
@@ -292,6 +292,7 @@
                                     success:function(data){
                                        layer.msg(data['msg']);
                                        layer.closeAll('page');
+                                       location.reload();
                                     }
                                 })                               
                             });

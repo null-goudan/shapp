@@ -1,5 +1,8 @@
+import time
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from time import timezone
 
 
 # 用户信息表
@@ -36,8 +39,8 @@ class WorkTable(models.Model):
     get_address = models.CharField('取货地址', max_length=50, default='')
     home_address = models.CharField('收货地址', max_length=50, default='')
     phone = models.CharField('电话', max_length=32, default='')
-    date_start = models.DateTimeField('开始时间', auto_now=True)
-    date_ending = models.DateTimeField('截止时间', auto_now=True)
+    date_start = models.DateTimeField('开始时间')
+    date_ending = models.DateTimeField('截止时间')
     back = models.IntegerField('回报', default=0)
     BackType = models.BooleanField('回报类型', default=False)  # 0代表金钱 1代表积分
     describe = models.TextField('详细需求/备注', max_length=200, default='')

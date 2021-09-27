@@ -295,25 +295,27 @@
                             });
 
                         // 修改单子接口
-                        form.on('submit(saveBtn)', function (data) {
-                            console.log(data.field);
-                            $.ajax({
-                                // url:'',
-                            data:{
-                                information:data.field
-                                },
-                                // type:'POST',
-                                dataType:'json',
-                                success:function(data){
-                                layer.msg('修改成功'); 
-                                }
+                            form.on('submit(saveBtn)', function (data) {
+                                console.log(data.field);
+                                $.ajax({
+                                    url:'/user/table_update/',
+                                    method:'post',
+                                    data:{
+                                        table_id: obj.data['table_id'],
+                                        information:data.field
+                                    },
+                                    // type:'POST',
+                                    dataType:'json',
+                                    success:function(data){
+                                        layer.msg('修改成功');
+                                    }
                                 })
-                        });
-                                $(window).on("resize", function () {
+                            });
+                            $(window).on("resize", function () {
                                     layer.full(index);
                                 });
-                                return false;
-                        } 
+                            return false;
+                        }
                         //删除单子接口
                         else if (obj.event === 'delete') {
                             layer.confirm('确认删除该订单吗', function (index) {

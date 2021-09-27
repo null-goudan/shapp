@@ -7,6 +7,13 @@ from django.db.models import Q
 import datetime
 
 
+def datetime_str_parse(str_datetime):
+    strlist = str_datetime.split(' ')
+    date_list = strlist[0].split('-')
+    time_list = strlist[1].split(':')
+    return datetime.datetime(int(date_list[0]),int(date_list[1]), int(date_list[2]), int(time_list[0]), int(time_list[1]), int(time_list[2]))
+
+
 def check_login(fn):
     def wrap(request, *args, **kwargs):
         if 'username' not in request.POST or 'uid' not in request.POST:
@@ -210,13 +217,13 @@ def __post_and_add(request):
     get_address = request.POST['get_address']
     home_address = request.POST['home_address']
     phone = request.POST['phone']
-    date_start = request.POST['date_start']
-    date_ending = request.POST['date_ending']
+    date_start = datetime_str_parse(request.POST['date_start'])
+    date_ending = datetime_str_parse(request.POST['date_ending'])
     reward = request.POST['reward']
     describe = request.POST['describe']
     try:
-        tableinfo = WorkTable.objects.create(title=title, classify=classify,goods=goods,get_address=get_address,
-                                         home_address=home_address, phone=phone,date_start=date_start, date_ending=date_ending,
+        tableinfo = WorkTable.objects.create(title=title, classify=classify, goods=goods, get_address=get_address,
+                                         home_address=home_address, phone=phone, date_start=date_start, date_ending=date_ending,
                                          back=reward, BackType=1, describe=describe)
     except Exception as e:
         print(e)
@@ -347,8 +354,8 @@ def send_table_info(request):
                 table_dict['phone'] = table_info.phone
                 table_dict['state'] = state_str
                 table_dict['runner'] = username_runner
-                table_dict['date_start'] = table_info.date_start
-                table_dict['date_ending'] = table_info.date_ending
+                table_dict['date_start'] = table_info.date_start+datetime.timedelta(hours=8)
+                table_dict['date_ending'] = table_info.date_ending+datetime.timedelta(hours=8)
                 table_dict['reward'] = table_info.back
                 table_dict['describe'] = table_info.describe
                 table_list.append(table_dict)
@@ -421,7 +428,7 @@ def order(request):
     if request.method == 'POST':
         uid = request.COOKIES['uid']
         table_deal_id = request.POST['table_id']
-        table_info = TableDeal.objects.get(id=table_deal_id)
+        table_info = TableDeal.objects.get(id=int(table_deal_id))
         table_id = table_info.Table_id
         table = WorkTable.objects.get(id=table_id)
         table_info.User_receive_id = uid
@@ -433,6 +440,39 @@ def order(request):
             'msg': '接单成功',
         }
         return HttpResponse(json.dumps(res))
+
+
+@check_login
+def order_list(request):
+    if request.method == 'GET':
+        res = {
+            'code': 0,
+        }
+        response = HttpResponse()
+        table_deal_all = TableDeal.objects.filter(isActive=1)
+        item_list = []
+        for item in table_deal_all:
+            if not item.User_receive_id:
+                user = User.objects.get(id=item.User_request_id)
+                tableinfo = WorkTable.objects.get(id=item.Table_id)
+                _dict = {
+                    'id': item.id,
+                    'title': tableinfo.title,
+                    'goods': tableinfo.goods,
+                    'classify': tableinfo.classify,
+                    'phone': tableinfo.phone,
+                    'username': user.username,
+                    'reward': tableinfo.back,
+                    'get_address': tableinfo.get_address,
+                    'home_address': tableinfo.home_address,
+                    'date_start': tableinfo.date_start+datetime.timedelta(hours=8),
+                    'date_end': tableinfo.date_ending+datetime.timedelta(hours=8),
+                    'describe': tableinfo.describe,
+                }
+                item_list.append(_dict)
+        res['data'] = item_list
+        response.write(json.dumps(res, cls=DateEncoder))
+        return response
 
 
 @check_login
@@ -466,8 +506,8 @@ def get_list(request):
                     'state': state_str,
                     'get_address': tableinfo.get_address,
                     'home_address': tableinfo.home_address,
-                    'date_start': tableinfo.date_start,
-                    'date_end': tableinfo.date_ending,
+                    'date_start': tableinfo.date_start+datetime.timedelta(hours=8),
+                    'date_end': tableinfo.date_ending+datetime.timedelta(hours=8),
                     'describe': tableinfo.describe,
                 }
                 item_list.append(_dict)
@@ -507,4 +547,33 @@ def finish_table(request):
             'msg': '成功',
         }
         return HttpResponse(json.dumps(res))
+
+
+def update(request):
+    if request.method == 'POST':
+        table_post = request.POST
+        table_deal_id = request.POST['table_id']
+        # 草 直接暴力更改吧
+        table_deal = TableDeal.objects.get(id=table_deal_id)
+        table_info = WorkTable.objects.get(id=table_deal.Table_id)
+        table_info.title = table_post['information[title]']
+        table_info.classify = table_post['information[classify]']
+        table_info.goods = table_post['information[goods]']
+        table_info.get_address = table_post['information[get-address]']
+        table_info.home_address = table_post['information[home_address]']
+        table_info.phone = table_post['information[phone]']
+        table_info.date_start = table_post['information[date_start]']
+        table_info.date_ending = table_post['information[date_ending]']
+        table_info.back = table_post['information[reward]']
+        table_info.describe = table_post['information[describe]']
+        table_info.save()
+        print(table_info)
+        res = {
+            'code': 0,
+            'msg': '更改成功'
+        }
+        return HttpResponse(json.dumps(res))
+
+
+
 
