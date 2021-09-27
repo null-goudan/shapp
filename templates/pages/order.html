@@ -44,6 +44,12 @@
  <!-- 查看单子详情 -->
     <div class="xiugai layui-form layuimini-form" hidden="hidden">   
        <form class="layui-form layui-form-pane" action="">
+           <div class="layui-form-item">
+                <label class="layui-form-label">单子编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" lay-verify="title" id="id" autocomplete="off" readonly="true" class="layui-input">
+                </div>
+            </div>
                 <div class="layui-form-item">
                 <label class="layui-form-label">标题</label>
                 <div class="layui-input-block">
@@ -133,17 +139,19 @@
 
 <script src="{% static 'lib/template-web.js' %}"></script>
 <script src="{% static 'lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
-<script src="{% static 'static/libs/isotope/isotope.pkgd.min.js' %}"></script>
+<script src="{% static '/static/libs/isotope/isotope.pkgd.min.js' %}"></script>
 
 {% verbatim %}
 <!-- template模板 -->
 <script id="tp1" type="text/html">
- {{each data  value i}} 
+ {{each data  value i}}
    {{if data[i].classify=="帮我取"}}
    <div class="activity">  
      <em style="display: none;">{{i}}</em>
     <div class="act-image-wrapper">
+        {% endverbatim %}
       <img src="{% static 'static/images/take-bg1.png' %}" alt="">
+        {% verbatim %}
     </div>           
     <h2 class="act-title" style="margin-top: 30px;">{{data[i].title}}</h2>
     <article>
@@ -159,13 +167,19 @@
         <i class="far fa-calendar" style="margin-left: -20px;"></i>
         {{data[i].date_start}}         
       </p>
+        <p class="data-published">
+        <i class="far fa-calendar" style="margin-left: -20px;"></i>
+        编号:{{data[i].id}}
+      </p>
     </div>
     </div>
     {{else if data[i].classify=="帮我买"}}
     <div class="activity"> 
       <em style="display: none;">{{i}}</em>   
       <div class="act-image-wrapper">
+          {% endverbatim %}
         <img src="{% static 'static/images/buy-bg1.png' %}" alt="">
+          {% verbatim %}
       </div>           
       <h2 class="act-title" style="margin-top: 30px;">{{data[i].title}}</h2>
       <article>
@@ -181,13 +195,19 @@
           <i class="far fa-calendar" style="margin-left: -20px;"></i>
           {{data[i].date_start}}         
         </p>
+          <p class="data-published">
+        <i class="far fa-calendar table_id" style="margin-left: -20px;"></i>
+        编号:{{data[i].id}}
+      </p>
       </div>
   </div> 
   {{else }}
   <div class="activity">  
     <em style="display: none;">{{i}}</em>
     <div class="act-image-wrapper">
+        {% endverbatim %}
       <img src="{% static 'static/images/do-bg1.png' %}" alt="">
+        {% verbatim %}
     </div>           
     <h2 class="act-title" style="margin-top: 30px;">{{data[i].title}}</h2>
     <article>
@@ -203,6 +223,10 @@
         <i class="far fa-calendar" style="margin-left: -20px;"></i>
         {{data[i].date_start}}         
       </p>
+        <p class="data-published">
+        <i class="far fa-calendar" style="margin-left: -20px;"></i>
+        编号:{{data[i].id}}
+      </p>
     </div>
 </div> 
   {{/if}}
@@ -213,12 +237,12 @@
 <script>
         //  显示订单接口
          $.ajax({
-              url:'/user/get_list',
+              url:'/user/get_list/',
               // type:'POST',
               dataType:'json',
               success:function(data){
                    //拼接模板
-                  var html=template('tp1',data);
+                  var html = template('tp1',data);
                   document.getElementById('order').innerHTML=html;
                   
                     //查看单子详情        
@@ -237,7 +261,8 @@
                     area: ['50%', '50%'],
                     content: $('.xiugai'),
                     success: function(layero, index){
-                        $("#title").val(data.data[number].title)
+                        $("#id").val(data.data[number].id);
+                        $("#title").val(data.data[number].title);
                         $("#classify").val(data.data[number].classify);
                         $("#goods").val(data.data[number].goods);
                         $("#get_address").val(data.data[number].get_address);
@@ -255,13 +280,17 @@
                  
                   // 接单接口
                  $(".order").on("click",function(){ 
-                layer.confirm('确认要接单吗', function () {                  
+                layer.confirm('确认要接单吗', function () {
+                                console.log($.cookie)
                                 $.ajax({
-                                    url:'../admin/api/table_waiting.json',
-                                    // type:'POST',
+                                    url:'/user/order/',
+                                    type:'POST',
+                                    data:{
+                                        'table_id':$("#id").val(),
+                                    },
                                     dataType:'json',
-                                    success:function(obj){
-                                       layer.msg('接单成功'); 
+                                    success:function(data){
+                                       layer.msg(data['msg']);
                                        layer.closeAll('page');
                                     }
                                 })                               

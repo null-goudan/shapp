@@ -216,21 +216,22 @@
                         url: '/user/send_table_info/',
                        
                         cols: [[
-                        {type: "checkbox", width: 50},
-                        {type: "numbers", width: 50,title: '序号'},
-                        {field: 'title', width: 150, title: '标题',align: "center"},
-                        {field: 'goods', width: 100, title: '名称',align: "center"},
-                        {field: 'classify', width: 90, title: '分类', sort: true,align: "center"},
-                        {field: 'state', width: 90, title: '状态', sort: true,align: "center"},
-                        {field: 'phone', width: 150, title: '联系电话',align: "center",hide:true},
-                        {field: 'runer', width: 100, title: '接单人',align: "center"},
-                        {field: 'reward', width: 100, title: '奖励', sort: true,align: "center"},
-                        {field: 'date_start', width: 200, title: '接单时间', sort: true,hide:true},  
-                        {field: 'date_ending', width: 200, title: '截止时间', sort: true,hide:true},
-                        {field: 'get_address', width: 100, title: '取货地址',align: "center",hide:true},
-                        {field: 'home_address', width: 100, title: '收货地址',align: "center",hide:true},
-                        {field: 'describe', width: 150, title: '详细描述', sort: true,hide:true},
-                        {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center",align: "center"}
+                            {type: "checkbox", width: 50},
+                            {type: "numbers", width: 50,title: '序号'},
+                            {field: 'table_id', width: 75, title: '编号', align: "center"},
+                            {field: 'title', width: 150, title: '标题',align: "center"},
+                            {field: 'goods', width: 100, title: '名称',align: "center"},
+                            {field: 'classify', width: 90, title: '分类', sort: true,align: "center"},
+                            {field: 'state', width: 90, title: '状态', sort: true,align: "center"},
+                            {field: 'phone', width: 150, title: '联系电话',align: "center",hide:true},
+                            {field: 'runner', width: 100, title: '接单人',align: "center"},
+                            {field: 'reward', width: 100, title: '奖励', sort: true,align: "center"},
+                            {field: 'date_start', width: 200, title: '接单时间', sort: true,hide:true},
+                            {field: 'date_ending', width: 200, title: '截止时间', sort: true,hide:true},
+                            {field: 'get_address', width: 100, title: '取货地址',align: "center",hide:true},
+                            {field: 'home_address', width: 100, title: '收货地址',align: "center",hide:true},
+                            {field: 'describe', width: 150, title: '详细描述', sort: true,hide:true},
+                            {title: '操作', minWidth: 200, toolbar: '#currentTableBar', align: "center",align: "center"}
                                 ]],
                         limits: [10, 15, 20, 25, 50, 100],
                         limit: 15,
@@ -316,10 +317,11 @@
                         //删除单子接口
                         else if (obj.event === 'delete') {
                             layer.confirm('确认删除该订单吗', function (index) {
+                                console.log(obj.data['table_id'])
                                 $.ajax({
                                     url:'/user/delete/',
                                     data:{
-                                        id:obj.data.id
+                                        table_id: obj.data['table_id']
                                     },
                                     type:'POST',
                                     dataType:'json',

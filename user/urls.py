@@ -15,6 +15,7 @@ urlpatterns = [
     path('send_table_info/', views.send_table_info),
     path('help/', views.help),
     path('order/', views.order),
-    path('get_list', views.get_list),
-
+    path('get_list/', views.get_list),
+    path('delete/', views.del_table),
+    path('finished/', views.finish_table),
 ]

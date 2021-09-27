@@ -227,6 +227,9 @@
        //提交帮我买单子接口
        $('#demo1').click(function(){
           $.ajax({
+              url:'/user/buy/',
+              method:'post',
+              dataType:'json',
               data:{
                  title:$("#title").val(), 
                  classify:$("#classify").val(),
@@ -241,7 +244,21 @@
                  describe:$("#describe").val()
               },
               success:function(data){
-
+                  if(data[0]['status']===1) {
+                      layer.open({
+                              title: '成功',
+                                context:'添加单子成功',
+                          }
+                        )
+                      setTimeout(window.location.replace('/user/information'),2500)
+                  }
+                  else{
+                        layer.open({
+                              title: '失败',
+                                context:data[0]['msg'],
+                          }
+                        )
+                  }
               }
           })
       })

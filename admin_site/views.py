@@ -33,17 +33,17 @@ def welcome(request):
             table_waiting_count = 0
             table_doing_count = 0
             table_finish_count = 0
-            table_list = TableDeal.objects.all()
+            table_list = TableDeal.objects.filter(isActive=1)
             for item in table_list:
                 if not item.User_receive_id:
                     table_waiting_count += 1
                 else:
                     table_id = item.Table_id
                     tableinfo = WorkTable.objects.get(id=table_id)
-                    if tableinfo.isAccept and not tableinfo.isFinished:
-                        table_doing_count += 1
-                    else:
+                    if tableinfo.isFinished:
                         table_finish_count += 1
+                    else:
+                        table_doing_count += 1
 
             res['user_count'] = user_count
             res['table_doing_count'] = table_doing_count
@@ -100,7 +100,7 @@ def table_doing(request):
         response = HttpResponse()
         res = {}
         itemlist = []
-        tables = TableDeal.objects.all()
+        tables = TableDeal.objects.filter(isActive=1)
         for table in tables:
             user = User.objects.get(id=table.User_request_id)
             tableinfo = WorkTable.objects.get(id=table.Table_id)
@@ -137,10 +137,14 @@ def table_finish(request):
         response = HttpResponse()
         res = {}
         itemlist = []
-        tables = TableDeal.objects.all()
+        tables = TableDeal.objects.filter(isActive=1)
         for table in tables:
             user = User.objects.get(id=table.User_request_id)
             tableinfo = WorkTable.objects.get(id=table.Table_id)
+            username_runner = '无'
+            username_runner_id = table.User_receive_id
+            if username_runner_id:
+                username_runner = User.objects.get(id=username_runner_id).username
             if tableinfo.isFinished:
                 _dict = {
                     'title': tableinfo.title,
@@ -149,6 +153,7 @@ def table_finish(request):
                     'phone': tableinfo.phone,
                     'username': user.username,
                     'reward': tableinfo.back,
+                    'runner': username_runner,
                     'get_address': tableinfo.get_address,
                     'home_address': tableinfo.home_address,
                     'date_start': str(tableinfo.date_start),
@@ -172,7 +177,7 @@ def table_waiting(request):
         response = HttpResponse()
         res = {}
         itemlist = []
-        tables = TableDeal.objects.all()
+        tables = TableDeal.objects.filter(isActive=1)
         for table in tables:
             user = User.objects.get(id=table.User_request_id)
             tableinfo = WorkTable.objects.get(id=table.Table_id)

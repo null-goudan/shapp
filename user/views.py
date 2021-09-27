@@ -3,6 +3,7 @@ from model.models import User, UserInfo, WorkTable, TableDeal
 from django.contrib.auth import authenticate
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, HttpResponseRedirect
 import json
+from django.db.models import Q
 import datetime
 
 
@@ -197,6 +198,14 @@ def __post_and_add(request):
     uid = cookie.get('uid')
     title = request.POST['title']
     classify = request.POST['classify']
+    if classify == 'take':
+        classify = '帮我取'
+    elif classify == 'do':
+        classify = '帮我做'
+    elif classify == 'buy':
+        classify = '帮我买'
+    else:
+        classify = '?'
     goods = request.POST['goods']
     get_address = request.POST['get_address']
     home_address = request.POST['home_address']
@@ -313,17 +322,31 @@ def send_table_info(request):
             return HttpResponseRedirect('/')
         table_list = []
         user = User.objects.get(id=cookie['uid'])
-        tables = TableDeal.objects.filter(User_request_id=user.id)
+        tables = TableDeal.objects.filter(User_request_id=user.id, isActive=1)
         for table in tables:
             table_dict = {}
+            state = 0
             if table.isActive == 1:
                 table_info = WorkTable.objects.get(id=table.Table_id)
+                username_runner = '无'
+                username_runner_id = table.User_receive_id
+                if username_runner_id:
+                    username_runner = User.objects.get(id=username_runner_id).username
+                if table_info.isFinished:
+                    state = 1
+                if state:
+                    state_str = '已完成'
+                else:
+                    state_str = '未完成'
+                table_dict['table_id'] = table.id
                 table_dict['title'] = table_info.title
                 table_dict['classify'] = table_info.classify
                 table_dict['goods'] = table_info.goods
                 table_dict['get_address'] = table_info.get_address
                 table_dict['home_address'] = table_info.home_address
                 table_dict['phone'] = table_info.phone
+                table_dict['state'] = state_str
+                table_dict['runner'] = username_runner
                 table_dict['date_start'] = table_info.date_start
                 table_dict['date_ending'] = table_info.date_ending
                 table_dict['reward'] = table_info.back
@@ -343,28 +366,145 @@ def password(request):
         return render(request, 'pages/user-password.html')
     if request.method == 'POST':
         post_dict = request.POST
+        print(post_dict)
 
 
 @check_login
 def help(request):
     if request.method == 'GET':
         return render(request, 'pages/user-help.html')
+    if request.method == 'POST':
+        uid = request.COOKIES['uid']
+        user = User.objects.get(id=uid)
+        response = HttpResponse()
+        res = {
+            'code': 0,
+            'msg': '成功',
+        }
+        item_list = []
+        tables = TableDeal.objects.filter(isActive=1)
+        for table in tables:
+            state = 0
+            if str(table.User_receive_id) == uid:
+                tableinfo = WorkTable.objects.get(id=table.Table_id)
+                if tableinfo.isFinished:
+                    state = 1
+                if state:
+                    state_str = '已完成'
+                else:
+                    state_str = '未完成'
+                _dict = {
+                    'table_id': table.id,
+                    'title': tableinfo.title,
+                    'goods': tableinfo.goods,
+                    'classify': tableinfo.classify,
+                    'phone': tableinfo.phone,
+                    'username': user.username,
+                    'reward': tableinfo.back,
+                    'state': state_str,
+                    'get_address': tableinfo.get_address,
+                    'home_address': tableinfo.home_address,
+                    'date_start': tableinfo.date_start,
+                    'date_end': tableinfo.date_ending,
+                    'describe': tableinfo.describe,
+                }
+                item_list.append(_dict)
+        res['data'] = item_list
+        response.write(json.dumps(res, cls=DateEncoder))
+        return response
 
 
 @check_login
 def order(request):
     if request.method == 'GET':
         return render(request, 'pages/order.html')
+    if request.method == 'POST':
+        uid = request.COOKIES['uid']
+        table_deal_id = request.POST['table_id']
+        table_info = TableDeal.objects.get(id=table_deal_id)
+        table_id = table_info.Table_id
+        table = WorkTable.objects.get(id=table_id)
+        table_info.User_receive_id = uid
+        table_info.save()
+        table.isAccept = 1
+        table.save()
+        res = {
+            'code': 0,
+            'msg': '接单成功',
+        }
+        return HttpResponse(json.dumps(res))
+
 
 @check_login
 def get_list(request):
     if request.method == 'GET':
+        res = {
+            'code': 0,
+        }
+        response = HttpResponse()
         table_deal_all = TableDeal.objects.all()
-        table_info_list = []
+        item_list = []
         for item in table_deal_all:
-            item_dict = {}
-            item_dict['tid'] = item.Table_id
-            item_dict['user_request_id'] = item.User_request_id
-            table_info_list.append(item_dict)
-        return HttpResponse(request, json.dumps(table_info_list))
+            if not item.User_receive_id:
+                state = 0
+                user = User.objects.get(id=item.User_request_id)
+                tableinfo = WorkTable.objects.get(id=item.Table_id)
+                if tableinfo.isFinished:
+                    state = 1
+                if state:
+                    state_str = '已完成'
+                else:
+                    state_str = '未完成'
+                _dict = {
+                    'id': item.Table_id,
+                    'title': tableinfo.title,
+                    'goods': tableinfo.goods,
+                    'classify': tableinfo.classify,
+                    'phone': tableinfo.phone,
+                    'username': user.username,
+                    'reward': tableinfo.back,
+                    'state': state_str,
+                    'get_address': tableinfo.get_address,
+                    'home_address': tableinfo.home_address,
+                    'date_start': tableinfo.date_start,
+                    'date_end': tableinfo.date_ending,
+                    'describe': tableinfo.describe,
+                }
+                item_list.append(_dict)
+        res['data'] = item_list
+        response.write(json.dumps(res, cls=DateEncoder))
+        return response
+
+
+@check_login
+def del_table(request):
+    if request.method == 'POST':
+        table_id = int(request.POST['table_id'])
+        print(table_id)
+        table_deal = TableDeal.objects.get(id=table_id)
+        table = WorkTable.objects.get(id=table_deal.Table_id)
+        table_deal.isActive = 0
+        table.isActive = 0
+        table_deal.save()
+        table.save()
+        res = {
+            'code': 0,
+            'msg': '删除成功',
+        }
+        return HttpResponse(json.dumps(res))
+
+
+@check_login
+def finish_table(request):
+    if request.method == 'POST':
+        table_deal_id = request.POST['table_id']
+        table_id = TableDeal.objects.get(id=table_deal_id).Table_id
+        table = WorkTable.objects.get(id=table_id)
+        table.isFinished = True
+        table.save()
+        res = {
+            'code': 0,
+            'msg': '成功',
+        }
+        return HttpResponse(json.dumps(res))
 
