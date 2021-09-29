@@ -123,7 +123,15 @@ def reg(request):
 
 def houtai_log(request):
     if request.method == 'GET':
-        return render(request, 'pages/login.html')
+        uid = request.COOKIES['uid']
+        if uid:
+            user = User.objects.get(id=uid)
+            if user.is_superuser:
+                return HttpResponseRedirect('/admin_site/')
+            else:
+                return render(request, 'pages/login.html')
+        else:
+            return render(request, 'pages/login.html')
     if request.method == 'POST':
         res = []
         resdic = {}
@@ -295,6 +303,11 @@ def information_userinfo(request):
             return HttpResponseNotFound()
         user = User.objects.get(id=cookie.get('uid'))
         userinfo = user.userinfo
+        res_dict = {
+            'code': 0,
+            'msg': '成功',
+            'count': 1,
+        }
         res = {}
         if userinfo:
             res['username'] = user.username
@@ -303,16 +316,40 @@ def information_userinfo(request):
             res['stu_num'] = userinfo.student_num
             res['email'] = user.email
             res['money'] = userinfo.money
-            response.write(json.dumps(res))
+            res_dict['data'] = [res, ]
+            response.write(json.dumps(res_dict))
         elif not userinfo:
             res['username'] = user.username
             res['name'] = 'xxx'
             res['sex'] = '男'
-            res['stu_num'] = '%%%%%%%%%'
+            res['stu_num'] = 0
             res['email'] = user.email
-            res['money'] = '%'
-            response.write(json.dumps(res))
+            res['money'] = 0
+            res_dict['data'] = [res, ]
+            response.write(json.dumps(res_dict))
         return response
+    if request.method == 'POST':
+        uid = request.COOKIES['uid']
+        post_dict = request.POST
+        username = post_dict['username']
+        sex = post_dict['sex']
+        email = post_dict['email']
+        user = User.objects.get(id=uid)
+        userinfo_id = user.userinfo_id
+        if userinfo_id:
+            userinfo = UserInfo.objects.get(id=user.userinfo_id)
+            userinfo.sex = sex
+            userinfo.save()
+        elif not userinfo_id:
+            pass
+        user.username = username
+        user.email = email
+        user.save()
+        res = {
+            'code': 1,
+            'msg': '成功',
+        }
+        return HttpResponse(json.dumps(res))
 
 
 @check_login
@@ -372,8 +409,21 @@ def password(request):
     if request.method == 'GET':
         return render(request, 'pages/user-password.html')
     if request.method == 'POST':
+        res = {}
         post_dict = request.POST
-        print(post_dict)
+        cookie = request.COOKIES
+        password_old = post_dict['password_old']
+        password_new = post_dict['password_new']
+        # print(password_new)
+        user = User.objects.get(id=cookie['uid'])
+        ok = user.check_password(raw_password=password_old)
+        if ok:
+            user.set_password(password_new)
+            user.save()
+            res['state'] = 1
+        else:
+            res['state'] = 0
+        return HttpResponse(json.dumps(res))
 
 
 @check_login

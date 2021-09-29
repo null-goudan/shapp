@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>同学助校园顺手捎网-个人中心</title>
     <link rel="stylesheet" href="{% static '/lib/layui-v2.6.3/css/layui.css' %}">
-    <script src="{% static '/lib/layui-v2.6.3/layui.js' %}"></script>
+    <script src="{% static 'lib/layui-v2.6.3/layui.js' %}"></script>
     <link rel="stylesheet"   href="{% static '/css/index.css' %}"/>
-    <script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'lib/jquery-3.4.1/jquery-3.4.1.min.js' %}"></script>
 </head>
 <body>
      
@@ -17,8 +17,8 @@
     <div class="log">同学助校园顺手捎网</div>
     <nav>
       <a href="/">首页</a>
-      <a href="/#showcases">在线接单</a>
-      <a href="/take">在线下单</a>
+      <a href="/ #showcases">在线接单</a>
+      <a href="/user/take">在线下单</a>
       <a href="/user/information">个人中心</a>
       <a href="/user/houtai_login">后台登录</a>
       <a href="#"><i class="fas fa-search"></i></a> 
@@ -48,13 +48,6 @@
                   <li class="layui-nav-item"><a href="" style="width: 195px;">我的积分</a></li>
                   <li class="layui-nav-item"><a href="/user/password" style="width: 195px;">修改密码</a></li>
                 </ul>
-        
-            
-            
-                <!-- <div class="bulletin" style="background-color: white;">
-                    <h2 >&nbsp &nbsp &nbsp系统公告</h2>
-                    <p> 欢迎登录窝嫩叠顺手捎网站!</p>
-                </div> -->
 
             
       </div>
@@ -71,17 +64,17 @@
                 <tbody>
                   <tr>
                     <td>用户名</td>
-                    <td id="username">user-1</td>
+                    <td id="username_index">user-1</td>
                   </tr>
-                  
+
                   <tr>
                     <td>真实姓名</td>
-                    <td id="name">张三</td>
+                    <td id="name_index">张三</td>
                   </tr>
 
                   <tr>
                     <td>性别</td>
-                    <td id="sex">男</td>
+                    <td id="sex_index">男</td>
                   </tr>
 
                   <tr>
@@ -91,7 +84,7 @@
 
                   <tr>
                     <td>电子邮箱</td>
-                    <td id="email">1161400732@qq.com</td>
+                    <td id="email_index">1161400732@qq.com</td>
                   </tr>
 
                   <tr>
@@ -102,12 +95,65 @@
               </table>
                 
 
-              <div class="layui-btn-container" style="margin-top: 20px;">
+              <div class="layui-btn-container" style="margin-top: 20px;margin-left: 50px;">
                    <div class="layui-input-inline" style="margin-left: 200px;">
-                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">编辑信息</button>
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn" id="edit">编辑信息</button>
                 </div>
-                <div class="layui-input-inline">
-                    <button class="layui-btn layui-btn" lay-submit lay-filter="saveBtn">确认保存</button>
+
+              </div>
+
+              <div class="xiugai layui-form layuimini-form" hidden="hidden">   
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" lay-verify="username" id="username" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            
+                <div class="layui-form-item">
+                    <label class="layui-form-label">真实姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name"  readonly="true" id="name" lay-verify="required" autocomplete="off"  class="layui-input">
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                  <label class="layui-form-label">性别</label>
+                  <div class="layui-input-block">
+                      <select name="sex" id="sex" lay-verify="">  
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+                </select>   
+                  </div>                
+                </div>
+                 
+                <div class="layui-form-item">
+                    <label class="layui-form-label">学号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="schoolnumber" readonly="true" id="schoolnumber"lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电子邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" id="email" lay-verify="required|email" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                
+                <div class="layui-form-item">
+                    <label class="layui-form-label">余额</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="reward" readonly="true" id="reward" lay-verify="required" autocomplete="off" readonly="true" class="layui-input">
+                    </div>
+                </div>           
+            </form>
+            
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                      <button class="layui-btn layui-btn save" lay-submit lay-filter="saveBtn" id="save_btn">确认保存</button>
+                    </div>
                 </div>
               </div>
                
@@ -159,23 +205,23 @@
           </div>
         </div>
       </footer>
-      <script rel="script">
+
+  <script rel="script">
             $.ajax({
                     url: '/user/information/get/',
                     type: 'get',
                     dataType: 'json',
                     success: function (data) {
-                        $('#username').text(data['username'])
-                        $('#name').text(data['name'])
-                        $('#sex').text(data['sex'])
-                        $('#email').text(data['email'])
-                        $('#student_num').text(data['stu_num'])
-                        $('#money').text(data['money'])
+                        $('#username_index').text(data['data'][0]['username'])
+                        $('#name_index').text(data['data'][0]['name'])
+                        $('#sex_index').text(data['data'][0]['sex'])
+                        $('#email_index').text(data['data'][0]['email'])
+                        $('#student_num').text(data['data'][0]['stu_num'])
+                        $('#money').text(data['data'][0]['money'])
                     }
                 }
             )
         </script>
-     
 
       <script>
       //注意：导航 依赖 element 模块，否则无法进行功能性操作
@@ -196,16 +242,60 @@
             type:"datetime"
         })
     })
-      layui.use('form',function(){
-          var form=layui.form;
-           form.on('submit(demo1)', function (data) {
-            layer.alert(JSON.stringify(data.field), {
-                title: '最终的提交信息'
+    $.ajax({
+             url:'/user/information/get/',
+              // type:'POST',
+              dataType:'json',
+              success:function(data){
+               layui.use(['form', 'table'], function () {
+            var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+            $("#edit").on("click",function(obj){
+                  var index= layer.open({
+                    title: '详情',
+                    type: 1,
+                    shade: 0,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: ['50%', '50%'],
+                    content: $('.xiugai'),
+                    success: function(layero, index){
+                         $("#username").val(data.data[0].username)
+                         $("#name").val(data.data[0].name);
+                         $("#sex").val(data.data[0].sex);
+                         $("#schoolnumber").val(data.data[0].stu_num);
+                         $("#email").val(data.data[0].email);
+                         $("#reward").val(data.data[0].money);
+                     },
+                });
+            $(".save").on("click", function (){
+                $.ajax(
+                    {
+                        url:'/user/information/get/',
+                        method:'post',
+                        datatype:'json',
+                        data:{
+                            username:$("#username").val(),
+                            sex:$("#sex").val(),
+                            email:$("#email").val(),
+                        },
+                        success:function (data){
+                            layer.msg(data['msg']);
+                        }
+                    }
+                )
             })
-            return false;
-        });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });            
+                return false;
+});
       })
-   
+              }
+    })
+      
 
         
       </script>

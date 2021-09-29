@@ -67,6 +67,12 @@
         <!-- 编辑查看表单 -->
         <div id="xiugai" class="layui-form layuimini-form"  hidden="hidden">
             <div class="layui-form-item">
+                <label class="layui-form-label required">用户编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="user_id" id="user_id" lay-verify="required" readonly="true" lay-reqtext="不可能" placeholder=不可能为空 value="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label required">用户名</label>
                 <div class="layui-input-block">
                     <input type="text" name="username" id="username" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
@@ -128,7 +134,7 @@
     
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+                <button class="layui-btn layui-btn-normal save-btn" lay-submit lay-filter="saveBtn">确认保存</button>
             </div>
         </div>
     </div>
@@ -161,6 +167,7 @@
             cols: [[
                 {type: "checkbox", width: 50},
                 {type: "numbers", width: 50,title: '序号'},
+                {field: 'user_id', width: 75, title: '用户编号',align: "center"},
                 {field: 'username', width: 150, title: '用户名',align: "center"},
                 {field: 'sex', width: 90, title: '性别', sort: true,align: "center"},
                 {field: 'name', width: 150, title: '真实姓名',align: "center"},
@@ -239,6 +246,7 @@
                     area: ['100%', '100%'],
                     content: $('#xiugai'),
                     success:function(layero,index){
+                        $("#user_id").val(data.user_id);
                         $("#username").val(data.username);
                         $("#sex").val(data.sex);
                         $("#name").val(data.name);
@@ -246,18 +254,56 @@
                         $("#schoolnumber").val(data.schoolnumber);     
                         $("#wealth").val(data.wealth);
                         $("#pass").val(data.pass);
+                        $(".save-btn").on("click",function (){
+                            $.ajax({
+                                url:'/admin_site/update_user/',
+                                method:'post',
+                                dataType: 'json',
+                                data:{
+                                    user_id: $("#user_id").val(),
+                                    username: $("#username").val(),
+                                    sex:$("#sex").val(),
+                                    name:$("#name").val(),
+                                    email:$("#email").val(),
+                                    stu_num:$("#schoolnumber").val(),
+                                    money:$("#wealth").val(),
+                                },
+                                success:function(data){
+
+                                }
+                        })
+                })
                     }
                 });
+
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
+
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除该用户吗', function (index) {
+                    $.ajax({
+                        url:'/admin_site/delete_user/',
+                        method: 'post',
+                        dataType: 'json',
+                        data:{
+                            'user_id': data.user_id,
+                        },
+                        success:function (backdata){
+                            if(backdata['code'].toString()==='1') {
+                                layer.msg('成功删除用户：' + data.user_id);
+                            }
+                            else{
+                                layer.msg('删除失败');
+                            }
+                        }
+                    })
                     obj.del();
                     layer.close(index);
                 });
             }
+
         });
 
     });

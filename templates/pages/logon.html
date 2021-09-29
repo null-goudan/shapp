@@ -236,19 +236,19 @@
               type:'POST',
               dataType:'json',
               success:function(data){
-
+                    layer.msg('注册成功，但是需要进一步认证');
               }
         })
     })
     $('#formStep2').click(function(){
-        console.log($("#name").val());
+        console.log($("#sex").val());
         $.ajax({
             url:'/user/reg/',
               data:{
                  name:$("#name").val(),
                  schoolnumber:$("#schoolnumber").val(),
                   age:$("#age").val(),
-                  sex:$("#sex").val(),
+                  sex:$("#sex input:radio:checked").val(),
                   step: 2
               },
               type:'POST',

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from model.models import User, TableDeal, UserInfo, WorkTable
 import json
 import datetime
@@ -16,12 +16,33 @@ class ComplexEncoder(json.JSONEncoder):
             return json.JSONEncoder.default(self, obj)
 
 
+def check_admin_login(fn):
+    def wrap(request, *args, **kwargs):
+        if 'username' not in request.POST or 'uid' not in request.POST:
+            cookie_username = request.COOKIES.get('username')
+            cookie_uid = request.COOKIES.get('uid')
+            if not cookie_uid:
+                return HttpResponseRedirect('/user/houtai_login')
+            user = User.objects.get(id=cookie_uid)
+            if not cookie_username or not cookie_uid:
+                return HttpResponseRedirect('/user/houtai_login')
+            if user.is_superuser == 0:
+                return HttpResponseRedirect('/user/houtai_login')
+            else:
+                request.session['username'] = cookie_username
+                request.session['uid'] = cookie_uid
+        return fn(request, *args, **kwargs)
+    return wrap
+
+
 # Create your views here.
+@check_admin_login
 def index(request):
     if request.method == 'GET':
         return render(request, 'admin/index.html')
 
 
+@check_admin_login
 def welcome(request):
     if request.method == 'GET':
         return render(request, 'admin/page/welcome.html')
@@ -29,7 +50,7 @@ def welcome(request):
         if request.POST['msg'] == 'get_info':
             response = HttpResponse()
             res = {}
-            user_count = User.objects.count()
+            user_count = User.objects.filter(is_active=1).count()
             table_count = TableDeal.objects.count()
             table_waiting_count = 0
             table_doing_count = 0
@@ -54,28 +75,31 @@ def welcome(request):
             return response
 
 
+@check_admin_login
 def table_user(request):
     if request.method == 'GET':
         return render(request, 'admin/page/table_user.html')
     if request.method == 'POST':
         response = HttpResponse()
         reslist = []
-        Userlist = User.objects.all()
+        Userlist = User.objects.filter(is_active=1);
         for item in Userlist:
             print(item.userinfo_id)
             if not item.userinfo_id:
                 _dict = {
+                    'user_id': item.id,
                     'username': item.username,
                     'sex': "",
                     'name': '',
                     'email': item.email,
                     'schoolnumber': '',
-                    'pass': 1,
+                    'pass': 0,
                     'wealth': 0,
                 }
             else:
                 userinfo = UserInfo.objects.get(id=item.userinfo_id)
                 _dict = {
+                    'user_id': item.id,
                     'username': item.username,
                     'sex': userinfo.sex,
                     'name': userinfo.name,
@@ -86,14 +110,15 @@ def table_user(request):
                 }
             reslist.append(_dict)
         res = {
-            'code':0,
-            'msg':"返回成功",
-            'data':reslist,
+            'code': 0,
+            'msg': "返回成功",
+            'data': reslist,
                }
         response.write(json.dumps(res))
         return response
 
 
+@check_admin_login
 def table_doing(request):
     if request.method == 'GET':
         return render(request, 'admin/page/table_doing.html')
@@ -131,6 +156,7 @@ def table_doing(request):
         return response
 
 
+@check_admin_login
 def table_finish(request):
     if request.method == 'GET':
         return render(request, 'admin/page/table_finish.html')
@@ -171,6 +197,7 @@ def table_finish(request):
         return response
 
 
+@check_admin_login
 def table_waiting(request):
     if request.method == 'GET':
         return render(request, 'admin/page/table_waiting.html')
@@ -206,16 +233,83 @@ def table_waiting(request):
         return response
 
 
+@check_admin_login
+def update_user(request):
+    if request.method == 'POST':
+        post_dict = request.POST
+        user_id = post_dict['user_id']
+        username = post_dict['username']
+        sex = post_dict['sex']
+        name = post_dict['name']
+        email = post_dict['email']
+        stu_num = post_dict['stu_num']
+        money = post_dict['money']
+        user = User.objects.get(id=user_id)
+        if not user:
+            res = {
+                'code': 0,
+                'msg': '没有该用户，怎么回事呢',
+            }
+            return HttpResponse(json.dumps(res))
+        userinfo_id = user.userinfo_id
+        userinfo = UserInfo.objects.get(id=userinfo_id)
+        if not userinfo:
+            res = {
+                'code': -1,
+                'msg': '该用户没有完善信息，怎么回事呢',
+            }
+            return HttpResponse(json.dumps(res))
+        user.username = username
+        user.email = email
+        userinfo.sex = sex
+        userinfo.name = name
+        userinfo.student_num = stu_num
+        userinfo.money = money
+        user.save()
+        userinfo.save()
+        res = {
+            'code': 1,
+            'msg': '成功'
+        }
+        return HttpResponse(json.dumps(res))
+
+
+@check_admin_login
+def delete_user(request):
+    if request.method == 'POST':
+        delete_user_id = request.POST['user_id']
+        user = User.objects.get(id=delete_user_id)
+        if not user:
+            res = {
+                'code': 0
+            }
+            return HttpResponse(json.dumps(res))
+        else:
+            user.is_active = 0;
+            user.save()
+            res = {
+                'code':1
+            }
+            return HttpResponse(json.dumps(res))
+
+
+@check_admin_login
 def user_setting(request):
     if request.method == 'GET':
         return render(request, 'admin/page/user-setting.html')
 
 
+@check_admin_login
 def user_password(request):
     if request.method == 'GET':
         return render(request, 'admin/page/user-password.html')
+    if request.method == 'POST':
+        post_dict = request.POST
+        password_old = post_dict['password_old']
+        password_new = post_dict['password_new']
 
 
+@check_admin_login
 def editor(request):
     if request.method == 'GET':
         return render(request, 'admin/page/editor.html')

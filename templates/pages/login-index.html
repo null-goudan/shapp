@@ -64,6 +64,7 @@
 <script src="{% static '/lib/jquery-3.4.1/jquery-3.4.1.min.js' %}" charset="utf-8"></script>
 <script src="{% static '/lib/layui-v2.6.3/layui.js' %}" charset="utf-8"></script>
 <script src="{% static '/lib/jq-module/jquery.particleground.min.js' %}" charset="utf-8"></script>
+
 <script>
     layui.use(['form'], function () {
         var form = layui.form,
@@ -112,11 +113,11 @@
               success:function(data){
                   console.log(data[0]['status'])
                   if(data[0]['status']!==1){
-                      layui.msg(data[0]['msg'].toString())
+                      layer.msg(data[0]['msg']);
                   }
                   else if(data[0]['status']===1){
-                      console.log('success')
-                      window.location.replace('/')
+                      layer.msg(data[0]['msg']);
+                      window.location.replace('/');
                   }
               }
          })
