@@ -310,9 +310,103 @@ def user_password(request):
 
 
 @check_admin_login
+def user_search(request):
+    if request.method == 'POST':
+        post_dict = request.POST
+        username = post_dict['username']
+        sex = post_dict['sex']
+        name = post_dict['name']
+        stu_num = post_dict['stu_num']
+        user_list = []
+        users = User.objects.filter(is_active=1)
+        if username:
+            user = User.objects.get(username=username)
+            if user:
+                if user.userinfo_id:
+                    userinfo = UserInfo.objects.get(id=user.userinfo_id)
+                    _dict = {
+                        'user_id': user.id,
+                        'username': user.username,
+                        'sex': userinfo.sex,
+                        'name': userinfo.name,
+                        'email': user.email,
+                        'schoolnumber': userinfo.student_num,
+                        'pass': 0,
+                        'wealth': userinfo.money,
+                        }
+                    user_list.append(_dict)
+                else:
+                    _dict = {
+                        'user_id': user.id,
+                        'username': user.username,
+                        'sex': "",
+                        'name': '',
+                        'email': user.email,
+                        'schoolnumber': '',
+                        'pass': 0,
+                        'wealth': 0,
+                    }
+                    user_list.append(_dict)
+        elif name:
+            for user in users:
+                if user.userinfo_id:
+                    userinfo = UserInfo.objects.get(id=user.userinfo_id)
+                    if userinfo:
+                        if userinfo.name == name:
+                            _dict = {
+                                'user_id': user.id,
+                                'username': user.username,
+                                'sex': userinfo.sex,
+                                'name': userinfo.name,
+                                'email': user.email,
+                                'schoolnumber': userinfo.student_num,
+                                'pass': 0,
+                                'wealth': userinfo.money,
+                            }
+                            user_list.append(_dict)
+        elif sex:
+            for user in users:
+                if user.userinfo_id:
+                    userinfo = UserInfo.objects.get(id=user.userinfo_id)
+                    if userinfo:
+                        if userinfo.sex == sex:
+                            _dict = {
+                                'user_id': user.id,
+                                'username': user.username,
+                                'sex': userinfo.sex,
+                                'name': userinfo.name,
+                                'email': user.email,
+                                'schoolnumber': userinfo.student_num,
+                                'pass': 0,
+                                'wealth': userinfo.money,
+                            }
+                            user_list.append(_dict)
+        elif stu_num:
+            for user in users:
+                if user.userinfo_id:
+                    userinfo = UserInfo.objects.get(id=user.userinfo_id)
+                    if userinfo:
+                        if userinfo.student_num == stu_num:
+                            _dict = {
+                                'user_id': user.id,
+                                'username': user.username,
+                                'sex': userinfo.sex,
+                                'name': userinfo.name,
+                                'email': user.email,
+                                'schoolnumber': userinfo.student_num,
+                                'pass': 0,
+                                'wealth': userinfo.money,
+                            }
+                            user_list.append(_dict)
+        res = {
+            'code': 0,
+            'msg': '成功',
+            'data': user_list,
+        }
+        return HttpResponse(json.dumps(res))
+
+
+@check_admin_login
 def editor(request):
     if request.method == 'GET':
         return render(request, 'admin/page/editor.html')
-
-
-

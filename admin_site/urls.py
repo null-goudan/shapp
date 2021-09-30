@@ -13,5 +13,6 @@ urlpatterns = [
     path('user-setting', views.user_setting),
     path('user-password', views.user_password),
     path('editor/', views.editor),
+    path('user_search/', views.user_search),
 
 ]

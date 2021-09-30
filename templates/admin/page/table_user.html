@@ -36,14 +36,14 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">用户学号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="city" autocomplete="off" class="layui-input">
+                                <input type="text" name="stu_num" autocomplete="off" class="layui-input">
                             </div>
                         </div>
 
                         <div class="layui-inline">
                             <label class="layui-form-label">真实姓名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="classify" autocomplete="off" class="layui-input">
+                                <input type="text" name="name" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -199,7 +199,20 @@
                     searchParams: result
                 }
             }, 'data');
-
+            $.ajax({
+                url:'/admin_site/user_search/',
+                method: 'post',
+                dataType:'json',
+                data:{
+                    'username': data.field.username,
+                    'stu_num': data.field.stu_num,
+                    'name': data.field.name,
+                    'sex': data.field.sex,
+                },
+                success:function (data){
+                    console.log(data);
+                }
+            })
             return false;
         });
 
